@@ -16,7 +16,7 @@ import StudioRegistryPanel from './components/StudioRegistryPanel';
 import PaintingCard from './components/PaintingCard';
 import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
-import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X, Mail, Instagram } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
 
 export default function App() {
@@ -64,6 +64,7 @@ export default function App() {
   
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -351,12 +352,12 @@ export default function App() {
         >
           CV
         </a>
-        <a 
-          href={`mailto:${artistProfile.email}`} 
-          className="bg-[#181818] hover:bg-black text-white px-4 sm:px-5 py-1.5 rounded-full font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] transition-all shadow-xs ml-1"
+        <button 
+          onClick={() => setIsContactModalOpen(true)} 
+          className="bg-[#181818] hover:bg-black text-white px-4 sm:px-5 py-1.5 rounded-full font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] transition-all shadow-xs ml-1 cursor-pointer"
         >
           CONTACT
-        </a>
+        </button>
         {isAdmin && (
           <button 
             onClick={handleToggleAdmin} 
@@ -1197,6 +1198,80 @@ export default function App() {
           </motion.div>
         </div>
       )}
+
+      {/* Collector Contact Modal */}
+      <AnimatePresence>
+        {isContactModalOpen && (
+          <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsContactModalOpen(false)}
+              className="absolute inset-0 cursor-zoom-out"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative bg-[#FAF6EE] border border-[#E8DEC7] max-w-md w-full p-6 sm:p-8 rounded-3xl shadow-2xl z-10 space-y-6 text-stone-900"
+            >
+              <button
+                onClick={() => setIsContactModalOpen(false)}
+                className="absolute top-5 right-5 text-stone-400 hover:text-stone-800 transition-colors p-1.5 rounded-full hover:bg-stone-200/50 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="space-y-1.5 text-left">
+                <span className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest block">Direct Communications</span>
+                <h3 className="font-serif text-2xl font-bold tracking-tight text-stone-900">Collector Contacts</h3>
+                <p className="font-sans text-xs text-stone-500 italic leading-relaxed">
+                  Direct channels for artwork acquisitions, private commissions, and exhibition inquiries.
+                </p>
+              </div>
+
+              <div className="space-y-3 pt-1">
+                {/* Email Card */}
+                <div className="p-4 border border-[#E8DEC7] bg-white rounded-2xl space-y-2 shadow-xs">
+                  <div className="flex items-center gap-2 text-stone-500 font-sans text-[10px] font-bold uppercase tracking-wider">
+                    <Mail className="w-3.5 h-3.5 text-amber-800" />
+                    <span>Direct Email</span>
+                  </div>
+                  <a
+                    href={`mailto:${artistProfile.email}`}
+                    className="font-sans text-sm font-semibold text-stone-900 hover:text-amber-800 transition-colors block break-all"
+                  >
+                    {artistProfile.email}
+                  </a>
+                </div>
+
+                {/* Instagram Card */}
+                <div className="p-4 border border-[#E8DEC7] bg-white rounded-2xl space-y-2 shadow-xs">
+                  <div className="flex items-center gap-2 text-stone-500 font-sans text-[10px] font-bold uppercase tracking-wider">
+                    <Instagram className="w-3.5 h-3.5 text-amber-800" />
+                    <span>Instagram Studio</span>
+                  </div>
+                  <a
+                    href={`https://www.instagram.com/${artistProfile.instagram.replace('@', '')}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-sans text-sm font-semibold text-stone-900 hover:text-amber-800 transition-colors flex items-center justify-between"
+                  >
+                    <span>{artistProfile.instagram}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-800 flex items-center gap-1">Visit Studio →</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-stone-300/40 text-[10px] text-stone-500 italic font-serif leading-relaxed text-center">
+                All inquiries regarding acquisitions and commissions are personally reviewed by the studio.
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
