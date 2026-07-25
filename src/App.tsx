@@ -326,26 +326,41 @@ export default function App() {
     }`}>
       
       {/* FLOATING HEADER / MENU */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center bg-white/90 backdrop-blur-md border border-stone-200/80 shadow-lg rounded-full py-1.5 px-3 sm:px-4 gap-1 sm:gap-2 max-w-[92vw]">
-        <a href="#gallery-controls-console" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
-          gallery
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center bg-[#FAF3E4] border border-[#E8DEC7] shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full py-2 px-5 sm:px-7 gap-4 sm:gap-6 max-w-[95vw]">
+        <a 
+          href="#gallery-controls-console" 
+          className="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-1"
+        >
+          GALLERY
         </a>
-        <a href="#upcoming-exhibitions-section" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
-          exhibitions
+        <a 
+          href="#upcoming-exhibitions-section" 
+          className="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-1"
+        >
+          EXHIBITIONS
         </a>
-        <a href="#artist-profile-panel" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
-          biography
+        <a 
+          href="#artist-profile-panel" 
+          className="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-1"
+        >
+          BIOGRAPHY
         </a>
-        <a href="#artist-cv-section" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
-          cv
+        <a 
+          href="#artist-cv-section" 
+          className="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-1"
+        >
+          CV
         </a>
-        <a href={`mailto:${artistProfile.email}`} className="px-4 py-1.5 bg-stone-900 hover:bg-stone-850 text-white rounded-full font-sans text-[10px] uppercase font-bold tracking-wider transition-all shadow-sm">
-          contact
+        <a 
+          href={`mailto:${artistProfile.email}`} 
+          className="bg-[#181818] hover:bg-black text-white px-5 py-2 rounded-full font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] transition-all shadow-md ml-1"
+        >
+          CONTACT
         </a>
         {isAdmin && (
           <button 
             onClick={handleToggleAdmin} 
-            className="px-2 py-1.5 rounded-full hover:bg-stone-100 text-stone-900 transition-all font-sans text-[10px] uppercase font-bold tracking-wider cursor-pointer"
+            className="p-1 rounded-full hover:bg-stone-300/40 text-stone-800 transition-all font-sans text-xs cursor-pointer"
             title="Lock Admin Dashboard"
           >
             🔒
