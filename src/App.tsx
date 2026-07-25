@@ -375,7 +375,7 @@ export default function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-2 transition-colors duration-300 ${
+          className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-4 transition-colors duration-300 ${
             theme === 'dark' ? 'border-white/10 text-stone-100' : 
             theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
             'border-stone-200/60 text-stone-900'
@@ -392,6 +392,48 @@ export default function App() {
             </div>
           </div>
 
+          {/* Right: Sleek Cream Navigation Pill Bar */}
+          <div className="mt-4 md:mt-0 flex items-center bg-[#FAF3E4] border border-[#E8DEC7] shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-full py-1.5 px-4 sm:px-6 gap-3 sm:gap-5 flex-wrap justify-center">
+            <a 
+              href="#gallery-controls-console" 
+              className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1"
+            >
+              GALLERY
+            </a>
+            <a 
+              href="#upcoming-exhibitions-section" 
+              className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1"
+            >
+              EXHIBITIONS
+            </a>
+            <a 
+              href="#artist-profile-panel" 
+              className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1"
+            >
+              BIOGRAPHY
+            </a>
+            <a 
+              href="#artist-cv-section" 
+              className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1"
+            >
+              CV
+            </a>
+            <a 
+              href={`mailto:${artistProfile.email}`} 
+              className="bg-[#181818] hover:bg-black text-white px-4 sm:px-5 py-1.5 rounded-full font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] transition-all shadow-xs ml-1"
+            >
+              CONTACT
+            </a>
+            {isAdmin && (
+              <button 
+                onClick={handleToggleAdmin} 
+                className="p-1 rounded-full hover:bg-stone-300/40 text-stone-800 transition-all font-sans text-xs cursor-pointer"
+                title="Lock Admin Dashboard"
+              >
+                🔒
+              </button>
+            )}
+          </div>
         </motion.header>
         
         {/* Immersive Typographic Exhibition Banner */}
