@@ -16,10 +16,10 @@ import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
 
 export const INITIAL_PROFILE: ArtistProfile = {
-  name: "Morphiq",
-  title: "Surrealist Abstract Artist",
+  name: "Husne Shabnam",
+  title: "Visual Artist",
   bio: "I am a surrealist abstract artist.\n\nI do not sketch before I begin.\nI do not plan what will emerge.\nI do not start with a destination.\n\nMy work arrives as a conversation with the unknown. Every line, form, and texture appears through intuition rather than intention. I often discover the artwork at the same time as the viewer. The process feels less like creating and more like receiving—a message, a memory, a symbol, or a fragment from a place beyond language.\n\nMy hand moves freely, but something deeper guides it. The worlds that emerge in my work are surreal, abstract, and open-ended. They are not meant to provide answers. They are invitations into reflection.\n\nIn a time that demands speed, certainty, and immediate understanding, my art asks for something different:\nPause.\nSilence.\nPatience.\n\nMany of my works reveal themselves slowly. They are not designed to be consumed in a glance. They ask the viewer to stay, to observe, and to listen.\n\nBecause art speaks differently to every person. What you see is often a reflection of what already exists within you:\nA shape that feels familiar.\nA forgotten memory.\nA hidden fear.\nA longing.\nA dream.\nA question.\n\nThe same artwork may tell entirely different stories to different people, because each viewer brings their own subconscious to the encounter.\n\nI believe that art is not complete when it leaves the artist’s hand. It becomes complete when it meets the inner world of another human being.\n\nThis website is a home for those conversations. A collection of messages from the unknown, waiting to find their meaning in you.",
-  statement: "If you find yourself here, take your time.\nLook closely.\nLook slowly.\nAllow the work to speak in its own language.\n\nAnd if a piece reminds you of a forgotten memory, an unfinished dream, a place you’ve never been, or a version of yourself you haven’t met yet, then the artwork has already fulfilled its purpose.\n\nWelcome to my world.\n— Morphiq",
+  statement: "If you find yourself here, take your time.\nLook closely.\nLook slowly.\nAllow the work to speak in its own language.\n\nAnd if a piece reminds you of a forgotten memory, an unfinished dream, a place you’ve never been, or a version of yourself you haven’t met yet, then the artwork has already fulfilled its purpose.\n\nWelcome to my world.\n— Husne Shabnam",
   avatarUrl: artistPortrait,
   instagram: "@themorphiq",
   email: "husneshabnam.connect@gmail.com",
@@ -37,6 +37,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: oilCoastalCliff,
     price: 3400,
     status: "Available",
+    collection: "Fossils of a Drifting Mind",
     createdAt: "2025-10-15T12:00:00Z"
   },
   {
@@ -50,6 +51,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: watercolorForest,
     price: 1800,
     status: "Available",
+    collection: "The Ones I Carry",
     createdAt: "2026-02-12T14:30:00Z"
   },
   {
@@ -62,7 +64,8 @@ export const INITIAL_PAINTINGS: Painting[] = [
     description: "An expressive abstract piece using highly-textured heavy body acrylic sweeps. Contrasts deep navy and carbon overlays with warm golden ochres and delicate hand-veined gold leafing, reflecting mental landscapes of shadow and hope.",
     imageUrl: abstractAcrylic,
     price: 4200,
-    status: "Reserved",
+    status: "In Collection",
+    collection: "Fossils of a Drifting Mind",
     createdAt: "2026-04-05T09:15:00Z"
   },
   {
@@ -76,6 +79,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: stillLifePears,
     price: 1200,
     status: "Sold",
+    collection: "The Ones I Carry",
     createdAt: "2025-12-01T16:45:00Z"
   },
   {
@@ -89,6 +93,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: painting5,
     price: 1600,
     status: "Available",
+    collection: "Whispers of the Subconscious",
     createdAt: "2026-05-10T10:00:00Z"
   },
   {
@@ -102,6 +107,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: painting6,
     price: 3400,
     status: "Available",
+    collection: "Whispers of the Subconscious",
     createdAt: "2026-05-20T11:30:00Z"
   },
   {
@@ -114,7 +120,8 @@ export const INITIAL_PAINTINGS: Painting[] = [
     description: "Layers of dense pigments intersecting with free-form lines. A visual representation of the unseen process through which raw emotion takes shape.",
     imageUrl: painting7,
     price: 4500,
-    status: "Reserved",
+    status: "In Collection",
+    collection: "The Ones I Carry",
     createdAt: "2026-05-28T15:45:00Z"
   },
   {
@@ -128,6 +135,7 @@ export const INITIAL_PAINTINGS: Painting[] = [
     imageUrl: painting8,
     price: 3800,
     status: "Available",
+    collection: "Fossils of a Drifting Mind",
     createdAt: "2026-05-30T09:00:00Z"
   }
 ];

@@ -7,6 +7,10 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Painting, ArtistProfile } from './types';
 import { INITIAL_PAINTINGS, INITIAL_PROFILE } from './data';
+import processSketchbook from './assets/images/process_sketchbook.png';
+import processWip from './assets/images/process_wip.png';
+import processTexture from './assets/images/process_texture.png';
+import processStudio from './assets/images/process_studio.png';
 import ArtistProfileSection from './components/ArtistProfileSection';
 import StudioRegistryPanel from './components/StudioRegistryPanel';
 import PaintingCard from './components/PaintingCard';
@@ -45,6 +49,7 @@ export default function App() {
   });
 
   const [artistProfile, setArtistProfile] = useState<ArtistProfile>(INITIAL_PROFILE);
+  const [selectedProcessImage, setSelectedProcessImage] = useState<{ src: string; title: string; description: string } | null>(null);
   
   // Gallery Theme: Locked to 'light' for premium linen aesthetic
   const theme = 'light';
@@ -454,10 +459,10 @@ export default function App() {
                 theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
                 'text-amber-805'
               }`}>
-                Featured Exhibition
+                {artistProfile.name} • {artistProfile.title}
               </span>
               <h2 className="flex flex-wrap justify-center md:justify-start gap-x-[0.25em] gap-y-[0.1em]">
-                {"EXPLORE THE SUBCONSCIOUS CANVAS".split(" ").map((word, i) => (
+                {"Every painting is a fossil of an unseen thought.".split(" ").map((word, i) => (
                   <motion.span
                     key={i}
                     initial={{ opacity: 0, y: 15 }}
@@ -483,7 +488,7 @@ export default function App() {
                 theme === 'funky' ? 'text-purple-200' :
                 'text-stone-605'
               }`}>
-                {`A collection of contemporary surrealist abstract works. Welcome to the visual world of ${artistProfile.name}.`.split(" ").map((word, i) => (
+                {"Morphiq: An evolving body of work exploring dreams, memory and transformation. Paintings born from memory, dreams and silence.".split(" ").map((word, i) => (
                   <motion.span
                     key={i}
                     initial={{ opacity: 0, y: 10 }}
@@ -610,6 +615,114 @@ export default function App() {
               profile={artistProfile}
               theme={theme}
             />
+          </motion.section>
+
+          {/* Section: Artist CV */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full pt-4"
+          >
+            <div className="bg-stone-50 border border-stone-200/60 p-6 md:p-8 rounded-2xl space-y-8">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/60 pb-4">
+                <div>
+                  <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Artist CV</h3>
+                  <p className="font-sans text-[10px] text-stone-500 uppercase tracking-widest mt-0.5">Professional credentials & archives</p>
+                </div>
+                <a
+                  href="./The_Morphiq_CV.pdf"
+                  download="Husne_Shabnam_CV.pdf"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 border border-stone-850 bg-stone-900 text-white hover:bg-stone-850 font-sans text-[10px] font-bold uppercase tracking-wider rounded-md shadow-xs transition-all cursor-pointer"
+                >
+                  <span>Download CV (PDF)</span>
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Column 1: Exhibitions */}
+                <div className="space-y-4">
+                  <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Exhibitions</h4>
+                  <ul className="space-y-3 font-sans text-xs text-stone-600">
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                      <span className="italic">Silence and Form</span>, Gallerie Metanoia, Paris
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                      <span className="italic">Fossils of a Drifting Mind</span>, The Linen Gallery, New York
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                      <span className="italic">Subconscious Dialogues</span>, Tokyo Art Center, Tokyo
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                      <span className="italic">Collective Memories</span>, Mumbai Contemporary Art Space, Mumbai
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2: Residencies & Education */}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Residencies</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                        Artist-in-Residence, The Quiet Room Residency, Kyoto, Japan
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                        Abstract & Form Fellowship, Brooklyn Art Lab, New York
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Education</h4>
+                    <ul className="space-y-2 font-sans text-xs text-stone-605">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2022</span>
+                        BFA in Visual Arts, Contemporary Art Institute
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Column 3: Publications & Awards */}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Publications</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                        "The Art of Slow Looking: Husne Shabnam's Surreal Abstract Worlds" in <span className="italic">Art in Dialogue</span>
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                        "From Silence to Canvas" interview in <span className="italic">Subconscious Art Quarterly</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Awards</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                        The Morphiq Grant for Abstract Visual Art
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                        Emerging Surrealist Artist Award
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.section>
           
           {/* Section: Gallery Works & Curation Panel */}
@@ -754,21 +867,93 @@ export default function App() {
             </div>
 
             {/* Gallery Paintings Grid list */}
-            <motion.div 
-              layout
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredPaintings.map((painting) => (
-                  <PaintingCard
-                    key={painting.id}
-                    painting={painting}
-                    onViewDetails={setSelectedPainting}
-                    theme={theme}
-                  />
-                ))}
-              </AnimatePresence>
-            </motion.div>
+            <div className="space-y-16">
+              {[
+                {
+                  name: "Fossils of a Drifting Mind",
+                  description: "An evolving body of work exploring dreams, memory and transformation. These paintings act as relics of raw subconscious thought, fossilized in physical layers."
+                },
+                {
+                  name: "The Ones I Carry",
+                  description: "A deeply personal selection of pieces, carrying emotional weights, silent dialogues, and intimate reflections."
+                },
+                {
+                  name: "Whispers of the Subconscious",
+                  description: "Pure intuitive paint explorations created without prior sketches or planning, allowing organic forms to emerge from silence."
+                }
+              ].map((col) => {
+                const collectionPaintings = filteredPaintings.filter((p) => p.collection === col.name);
+                if (collectionPaintings.length === 0) return null;
+
+                return (
+                  <div key={col.name} className="space-y-6 pt-12 border-t border-stone-200/40 first:border-0 first:pt-0">
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-lg font-bold tracking-wider text-stone-900 uppercase">
+                        {col.name}
+                      </h3>
+                      <p className="font-sans text-[11px] italic text-stone-500 max-w-2xl leading-relaxed">
+                        {col.description}
+                      </p>
+                    </div>
+
+                    <motion.div 
+                      layout
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pt-4"
+                    >
+                      <AnimatePresence mode="popLayout">
+                        {collectionPaintings.map((painting) => (
+                          <PaintingCard
+                            key={painting.id}
+                            painting={painting}
+                            onViewDetails={setSelectedPainting}
+                            theme={theme}
+                            isAdmin={isAdmin}
+                          />
+                        ))}
+                      </AnimatePresence>
+                    </motion.div>
+                  </div>
+                );
+              })}
+
+              {/* Unassigned / Other Collection */}
+              {(() => {
+                const unassignedPaintings = filteredPaintings.filter(
+                  (p) => !p.collection || !['Fossils of a Drifting Mind', 'The Ones I Carry', 'Whispers of the Subconscious'].includes(p.collection)
+                );
+                if (unassignedPaintings.length === 0) return null;
+
+                return (
+                  <div className="space-y-6 pt-12 border-t border-stone-200/40">
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-lg font-bold tracking-wider text-stone-900 uppercase">
+                        Other Archives & Independent Studies
+                      </h3>
+                      <p className="font-sans text-[11px] italic text-stone-500 max-w-2xl leading-relaxed">
+                        Various independent visual abstractions and sketch studies.
+                      </p>
+                    </div>
+
+                    <motion.div 
+                      layout
+                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pt-4"
+                    >
+                      <AnimatePresence mode="popLayout">
+                        {unassignedPaintings.map((painting) => (
+                          <PaintingCard
+                            key={painting.id}
+                            painting={painting}
+                            onViewDetails={setSelectedPainting}
+                            theme={theme}
+                            isAdmin={isAdmin}
+                          />
+                        ))}
+                      </AnimatePresence>
+                    </motion.div>
+                  </div>
+                );
+              })()}
+            </div>
 
             {/* Empty matching result indicator */}
             {filteredPaintings.length === 0 && (
@@ -798,6 +983,63 @@ export default function App() {
                 </button>
               </motion.div>
             )}
+          </motion.section>
+
+          {/* Section: Creative Process */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-8 pt-8 border-t border-stone-200/40"
+          >
+            <div className="text-center space-y-2 max-w-xl mx-auto">
+              <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Creative Process</h3>
+              <p className="font-sans text-[11px] italic text-stone-500 leading-relaxed">
+                A glimpse into the quiet sanctuary of the studio—the raw sketches, works in progress, close-up paint textures, and thoughts emerging from silence.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
+              {[
+                {
+                  src: processSketchbook,
+                  title: "Sketchbook Explorations",
+                  description: "Ink and charcoal markings on paper—where raw visual thoughts first take form in silence."
+                },
+                {
+                  src: processWip,
+                  title: "Work in Progress",
+                  description: "An emerging canvas on the studio easel, slowly taking shape under natural light."
+                },
+                {
+                  src: processTexture,
+                  title: "Close-up Details",
+                  description: "A macro view of thick impasto gesso, warm ochre pigments, and delicate gold leaf."
+                },
+                {
+                  src: processStudio,
+                  title: "Studio Sanctuary",
+                  description: "Canvases leaning against linen walls—a space where intuition is allowed to exist without explanation."
+                }
+              ].map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="group relative overflow-hidden bg-stone-100 rounded-sm aspect-square cursor-pointer shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgb(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-1"
+                  onClick={() => setSelectedProcessImage(item)}
+                >
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-stone-900/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
+                    <h5 className="font-serif text-[11px] font-bold uppercase tracking-wider">{item.title}</h5>
+                    <p className="font-sans text-[10px] text-stone-200 mt-1 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.section>
 
           {/* Section: Studio Registry Ledger & Contacts */}
@@ -901,6 +1143,7 @@ export default function App() {
           painting={selectedPainting}
           onClose={() => setSelectedPainting(null)}
           theme={theme}
+          isAdmin={isAdmin}
         />
       )}
 
@@ -911,6 +1154,43 @@ export default function App() {
           onPost={handlePostPainting}
           theme={theme}
         />
+      )}
+
+      {/* Lightbox Modal for Process Images */}
+      {selectedProcessImage && (
+        <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-stone-955/75 backdrop-blur-xs">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProcessImage(null)}
+            className="absolute inset-0 cursor-zoom-out"
+          />
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative bg-white border border-stone-200 max-w-3xl w-full p-4 md:p-6 rounded-lg shadow-2xl z-10 space-y-4"
+          >
+            <button
+              onClick={() => setSelectedProcessImage(null)}
+              className="absolute top-4 right-4 text-stone-500 hover:text-stone-800 transition-colors cursor-pointer z-20"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="aspect-video w-full overflow-hidden bg-stone-50 rounded-sm">
+              <img
+                src={selectedProcessImage.src}
+                alt={selectedProcessImage.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="space-y-1.5 text-stone-900">
+              <h4 className="font-serif text-base font-bold">{selectedProcessImage.title}</h4>
+              <p className="font-sans text-xs text-stone-600 leading-relaxed">{selectedProcessImage.description}</p>
+            </div>
+          </motion.div>
+        </div>
       )}
     </div>
   );

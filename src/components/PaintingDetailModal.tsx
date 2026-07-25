@@ -12,9 +12,10 @@ interface PaintingDetailModalProps {
   painting: Painting | null;
   onClose: () => void;
   theme?: 'light' | 'dark' | 'funky';
+  isAdmin?: boolean;
 }
 
-export default function PaintingDetailModal({ painting, onClose, theme = 'dark' }: PaintingDetailModalProps) {
+export default function PaintingDetailModal({ painting, onClose, theme = 'dark', isAdmin = false }: PaintingDetailModalProps) {
   const [inquiryName, setInquiryName] = useState('');
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryMsg, setInquiryMsg] = useState('');
@@ -438,21 +439,34 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark' 
                 </div>
               </div>
 
-              {painting.price !== null ? (
-                <div className="flex items-center justify-between mb-5">
-                  <span className="text-xs text-stone-500 font-sans">Acquisition Price</span>
-                  <span className={`font-serif text-2xl font-bold ${
-                    theme === 'dark' ? 'text-amber-400' :
-                    theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
-                    'text-stone-955'
-                  }`}>
-                    ${painting.price.toLocaleString()} USD
-                  </span>
-                </div>
+              {isAdmin ? (
+                painting.price !== null ? (
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="text-xs text-stone-500 font-sans">Acquisition Price</span>
+                    <span className={`font-serif text-2xl font-bold ${
+                      theme === 'dark' ? 'text-amber-400' :
+                      theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
+                      'text-stone-955'
+                    }`}>
+                      ${painting.price.toLocaleString()} USD
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between mb-5 font-sans">
+                    <span className="text-xs text-stone-500 font-sans">Acquisition Price</span>
+                    <span className="text-stone-500 italic text-xs">NFS (Not For Sale) / Private Collection</span>
+                  </div>
+                )
               ) : (
                 <div className="flex items-center justify-between mb-5 font-sans">
                   <span className="text-xs text-stone-500 font-sans">Acquisition Price</span>
-                  <span className="text-stone-500 italic text-xs">NFS (Not For Sale) / Private Collection</span>
+                  <span className={`font-serif text-lg font-semibold ${
+                    theme === 'dark' ? 'text-stone-300' :
+                    theme === 'funky' ? 'text-fuchsia-400 text-glow-neon' :
+                    'text-stone-805'
+                  }`}>
+                    {isAvailable ? 'Price on Request' : 'NFS / In Collection'}
+                  </span>
                 </div>
               )}
 

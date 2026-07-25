@@ -13,7 +13,8 @@ export interface Painting {
   description: string;
   imageUrl: string;
   price: number | null;
-  status: 'Available' | 'Sold' | 'Reserved';
+  status: 'Available' | 'Sold' | 'In Collection';
+  collection?: 'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious';
   createdAt: string;
 }
 

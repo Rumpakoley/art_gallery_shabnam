@@ -13,28 +13,34 @@ interface PaintingCardProps {
   painting: Painting;
   onViewDetails: (painting: Painting) => void;
   theme?: 'light' | 'dark' | 'funky';
+  isAdmin?: boolean;
 }
 
-export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }: PaintingCardProps): React.JSX.Element {
+export default function PaintingCard({ 
+  painting, 
+  onViewDetails, 
+  theme = 'dark',
+  isAdmin = false
+}: PaintingCardProps): React.JSX.Element {
   const isAvailable = painting.status === 'Available';
   const isSold = painting.status === 'Sold';
-  const isReserved = painting.status === 'Reserved';
+  const isInCollection = painting.status === 'In Collection';
 
   return (
     <motion.div
       id={`painting-card-${painting.id}`}
       layout
-      initial={{ opacity: 0, y: 45, scale: 0.96 }}
+      initial={{ opacity: 0, y: 35, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: false, amount: 0.08 }}
+      viewport={{ once: true, amount: 0.05 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative flex flex-col p-3 transition-all duration-500 border ${
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className={`group relative flex flex-col transition-all duration-500 ${
         theme === 'dark' 
-          ? 'glass-card rounded-[1.25rem] text-stone-100 hover:-translate-y-1.5' :
+          ? 'glass-card rounded-[1.25rem] text-stone-100 hover:-translate-y-1.5 p-3 border border-white/5' :
         theme === 'funky'
-          ? 'bg-[#150c2c] border-purple-900/40 text-purple-100 hover:border-fuchsia-500/80 hover:shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:-translate-y-1.5 hover:rotate-1 rounded-lg'
-          : 'bg-stone-50 border-stone-200/60 text-stone-900 hover:border-stone-300 hover:shadow-md hover:-translate-y-1.5 shadow-2xs rounded-lg'
+          ? 'bg-[#150c2c] border border-purple-900/40 text-purple-100 hover:border-fuchsia-500/80 hover:shadow-[0_0_25px_rgba(236,72,153,0.35)] hover:-translate-y-1.5 hover:rotate-1 rounded-lg p-3'
+          : 'bg-transparent text-stone-900 hover:-translate-y-1'
       }`}
     >
       {/* Decorative Vector Curve in Dark Mode */}
@@ -46,46 +52,44 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
         </div>
       )}
 
-      {/* Matte Frame Container (Passe-Partout Mount or Rounded Borderless preview depending on theme) */}
+      {/* Image Container */}
       <div 
-        className={`relative overflow-hidden aspect-3/4 cursor-pointer flex items-center justify-center transition-all duration-350 shadow-inner ${
+        className={`relative overflow-hidden aspect-3/4 cursor-pointer flex items-center justify-center transition-all duration-350 ${
           theme === 'dark' ? 'p-1.5 bg-black/30 border border-white/5 rounded-xl' :
           theme === 'funky' ? 'holo-mount border-purple-955 shadow-[inset_0_2px_12px_rgba(255,255,255,0.4)] p-5 rounded-sm' :
-          'bg-[#FCFAF5] border-stone-200 shadow-[inset_0_2px_6px_rgba(0,0,0,0.06)] p-5 rounded-sm'
+          'bg-stone-100 border border-stone-200/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)] group-hover:shadow-[0_15px_40px_rgb(0,0,0,0.08)] transition-shadow duration-500 rounded-sm'
         }`}
         onClick={() => onViewDetails(painting)}
       >
-        {/* Beveled edge cut of the mat board (only for Light/Funky mounted prints) */}
-        {theme !== 'dark' && (
-          <div className={`absolute inset-[15px] border pointer-events-none transition-colors duration-300 ${
-            theme === 'funky' ? 'border-white/20' : 'border-stone-300/20'
-          }`} />
+        {/* Beveled edge cut of the mat board (only for Funky mounted prints) */}
+        {theme === 'funky' && (
+          <div className="absolute inset-[15px] border border-white/20 pointer-events-none transition-colors duration-300" />
         )}
 
         <img
           src={painting.imageUrl}
           alt={painting.title}
           referrerPolicy="no-referrer"
-          className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] ${
-            theme === 'dark' ? 'rounded-[10px]' : 'shadow-sm'
+          className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] ${
+            theme === 'dark' ? 'rounded-[10px]' : ''
           }`}
         />
         
         {/* Subtle Matte Inner Shadow Overlay */}
-        <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.06)]" />
+        <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-black/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.04)]" />
 
         {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-xl">
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-sm">
           <motion.div 
             initial={{ scale: 0.8, opacity: 0 }}
             whileHover={{ scale: 1.05 }}
             className={`p-2 px-3.5 rounded-full shadow-lg flex items-center justify-center gap-1.5 backdrop-blur-xs font-sans text-[9px] font-bold tracking-widest uppercase cursor-pointer ${
               theme === 'funky' ? 'bg-fuchsia-600/90 text-white hover:bg-fuchsia-500' : 
-              theme === 'dark' ? 'bg-amber-655/90 text-stone-950 hover:bg-amber-500 font-extrabold' :
+              theme === 'dark' ? 'bg-amber-655/90 text-stone-955 hover:bg-amber-500 font-extrabold' :
               'bg-stone-900/90 text-stone-100'
             }`}
           >
-            <Maximize2 className={`w-3 h-3 ${theme === 'funky' ? 'text-cyan-200' : theme === 'dark' ? 'text-stone-955' : 'text-amber-400'}`} />
+            <Maximize2 className={`w-3.5 h-3.5 ${theme === 'funky' ? 'text-cyan-200' : theme === 'dark' ? 'text-stone-955' : 'text-amber-400'}`} />
             <span>Exhibition Room</span>
           </motion.div>
         </div>
@@ -98,19 +102,19 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
               ? theme === 'funky'
                 ? 'bg-cyan-950/90 text-cyan-400 border-cyan-800/40 text-glow-cyan'
                 : theme === 'dark'
-                  ? 'bg-amber-950/80 text-amber-400 border-amber-900/30'
-                  : 'bg-emerald-100 text-emerald-800 border-emerald-200' 
-              : isReserved
+                  ? 'bg-amber-955/80 text-amber-400 border-amber-900/30'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-100' 
+              : isInCollection
                 ? theme === 'funky'
-                  ? 'bg-fuchsia-950/90 text-fuchsia-400 border-fuchsia-800/40 text-glow-neon'
+                  ? 'bg-fuchsia-955/90 text-fuchsia-400 border-fuchsia-800/40 text-glow-neon'
                   : theme === 'dark'
-                    ? 'bg-amber-950/80 text-amber-400 border-amber-900/30'
-                    : 'bg-amber-100 text-amber-800 border-amber-200' 
+                    ? 'bg-amber-955/80 text-amber-400 border-amber-900/30'
+                    : 'bg-stone-100 text-stone-605 border-stone-200' 
                 : theme === 'funky'
-                  ? 'bg-purple-950/60 text-purple-400 border-purple-900/30 line-through'
+                  ? 'bg-purple-955/60 text-purple-400 border-purple-900/30 line-through'
                   : theme === 'dark'
                     ? 'bg-stone-800/90 text-stone-400 border-stone-700/35 line-through'
-                    : 'bg-stone-200 text-stone-600 border-stone-300 line-through'
+                    : 'bg-stone-200 text-stone-500 border-stone-300 line-through'
           }`}
         >
           {painting.status}
@@ -137,62 +141,48 @@ export default function PaintingCard({ painting, onViewDetails, theme = 'dark' }
           </h3>
           <div><span className="opacity-50 font-medium">Medium:</span> <span className="text-stone-300 font-medium">{painting.medium}</span></div>
           <div><span className="opacity-50 font-medium">Dimensions:</span> <span className="text-stone-300 font-medium">{painting.dimensions}</span></div>
-          {painting.price !== null && (
+          {isAdmin ? (
             <div className="text-amber-400 font-bold font-serif text-xs mt-1">
-              ${painting.price.toLocaleString()}
+              ${painting.price?.toLocaleString()}
             </div>
-          )}
+          ) : painting.status === 'Available' ? (
+            <div className="text-stone-400 font-sans text-[10px] uppercase tracking-wider mt-1">
+              Price on Request
+            </div>
+          ) : null}
         </div>
       ) : (
-        <div className="mt-4 flex flex-col flex-grow">
-          <div className="flex items-start justify-between gap-2">
+        <div className="mt-3 flex flex-col flex-grow">
+          <div className="flex items-baseline justify-between gap-2">
             <h3 
-              className={`font-serif text-base font-semibold transition-colors cursor-pointer leading-snug ${
+              className={`font-serif text-sm font-medium transition-colors cursor-pointer leading-snug ${
                 theme === 'funky' ? 'text-purple-100 hover:text-cyan-400 text-glow-cyan font-bold animate-pulse' : 
-                'text-stone-900 hover:text-amber-855'
+                'text-stone-900 hover:text-amber-800'
               }`}
               onClick={() => onViewDetails(painting)}
             >
               {painting.title}
             </h3>
-            {painting.price !== null && (
-              <span className={`font-serif font-semibold whitespace-nowrap text-base ${
+            {isAdmin ? (
+              <span className={`font-serif font-semibold whitespace-nowrap text-xs ${
                 theme === 'funky' ? 'text-fuchsia-400 text-glow-neon font-bold' : 
-                'text-stone-705'
+                'text-stone-700'
               }`}>
-                ${painting.price.toLocaleString()}
+                ${painting.price?.toLocaleString()}
               </span>
-            )}
+            ) : painting.status === 'Available' ? (
+              <span className="font-sans text-[9px] uppercase tracking-widest font-semibold text-stone-450 whitespace-nowrap">
+                Price on Request
+              </span>
+            ) : null}
           </div>
           
-          <p className={`font-sans text-[11px] italic mt-1 ${
-            theme === 'funky' ? 'text-purple-405' : 
+          <p className={`font-sans text-[10px] italic mt-0.5 ${
+            theme === 'funky' ? 'text-purple-400' : 
             'text-stone-500'
           }`}>
             {painting.medium} • {painting.dimensions}
           </p>
-
-          <p className={`font-sans text-xs mt-2.5 line-clamp-2 leading-relaxed flex-grow ${
-            theme === 'funky' ? 'text-purple-200/80' : 
-            'text-stone-605'
-          }`}>
-            {painting.description}
-          </p>
-
-          {isAvailable && (
-            <div className={`mt-4 pt-3 border-t flex items-center justify-between ${
-              theme === 'funky' ? 'border-purple-900/30' : 
-              'border-stone-150/50'
-            }`}>
-              <span className={`inline-flex items-center gap-1 font-sans text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-sm ${
-                theme === 'funky' ? 'bg-fuchsia-955/40 text-fuchsia-400 border border-fuchsia-900/30 text-glow-neon' : 
-                'bg-emerald-50 text-emerald-800'
-              }`}>
-                <Tag className="w-3.5 h-3.5" />
-                Available Original
-              </span>
-            </div>
-          )}
         </div>
       )}
     </motion.div>

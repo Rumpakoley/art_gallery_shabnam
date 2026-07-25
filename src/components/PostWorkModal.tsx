@@ -56,7 +56,8 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const [dimensions, setDimensions] = useState('24 x 36 inches');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('1200');
-  const [status, setStatus] = useState<'Available' | 'Sold' | 'Reserved'>('Available');
+  const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>('Available');
+  const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>('Fossils of a Drifting Mind');
   
   // Image handling
   const [customUrl, setCustomUrl] = useState('');
@@ -140,6 +141,7 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
       imageUrl: finalImageUrl,
       price: priceNum,
       status,
+      collection,
       createdAt: new Date().toISOString()
     };
 
@@ -423,6 +425,28 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
                 </div>
               </div>
 
+              {/* Body of Work / Collection */}
+              <div className="space-y-1">
+                <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
+                  theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
+                }`}>
+                  Body of Work (Collection)
+                </label>
+                <select
+                  value={collection}
+                  onChange={(e) => setCollection(e.target.value as any)}
+                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
+                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
+                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
+                    'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                  }`}
+                >
+                  <option value="Fossils of a Drifting Mind">Fossils of a Drifting Mind</option>
+                  <option value="The Ones I Carry">The Ones I Carry</option>
+                  <option value="Whispers of the Subconscious">Whispers of the Subconscious</option>
+                </select>
+              </div>
+
               {/* Status and Custom URL */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -432,17 +456,17 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
                     Initial Status
                   </label>
                   <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as any)}
-                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
-                    }`}
+                     value={status}
+                     onChange={(e) => setStatus(e.target.value as any)}
+                     className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
+                       theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
+                       theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
+                       'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                     }`}
                   >
-                    <option value="Available">Available for Purchase</option>
-                    <option value="Sold">Sold / Private Collection</option>
-                    <option value="Reserved">Reserved for Exhibition</option>
+                     <option value="Available">Available for Purchase</option>
+                     <option value="Sold">Sold</option>
+                     <option value="In Collection">In Collection</option>
                   </select>
                 </div>
 

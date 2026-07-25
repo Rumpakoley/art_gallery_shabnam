@@ -25,7 +25,7 @@ export default function StudioRegistryPanel({
 }: StudioRegistryPanelProps): React.JSX.Element {
   const totalWorks = paintings.length;
   const availableWorks = paintings.filter(p => p.status === 'Available').length;
-  const soldWorks = paintings.filter(p => p.status === 'Sold').length;
+  const soldWorks = paintings.filter(p => p.status === 'Sold' || p.status === 'In Collection').length;
 
   return (
     <div id="studio-registry-panel" className={`p-6 md:p-8 rounded-2xl border transition-colors duration-300 ${
