@@ -325,48 +325,7 @@ export default function App() {
       'bg-artist-bg text-stone-900'
     }`}>
       
-      {/* FLOATING HEADER / MENU */}
-      <div className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 z-50 flex items-center bg-[#FAF3E4] border border-[#E8DEC7] shadow-[0_6px_25px_rgba(0,0,0,0.07)] rounded-full py-1.5 px-4 sm:px-6 gap-2.5 sm:gap-4 max-w-[95vw]">
-        <a 
-          href="#gallery-controls-console" 
-          className="font-sans text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          GALLERY
-        </a>
-        <a 
-          href="#upcoming-exhibitions-section" 
-          className="font-sans text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          EXHIBITIONS
-        </a>
-        <a 
-          href="#artist-profile-panel" 
-          className="font-sans text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          BIOGRAPHY
-        </a>
-        <a 
-          href="#artist-cv-section" 
-          className="font-sans text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.14em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          CV
-        </a>
-        <a 
-          href={`mailto:${artistProfile.email}`} 
-          className="bg-[#181818] hover:bg-black text-white px-4 py-1.5 rounded-full font-sans text-[9px] sm:text-[10px] font-extrabold uppercase tracking-[0.14em] transition-all shadow-xs ml-1"
-        >
-          CONTACT
-        </a>
-        {isAdmin && (
-          <button 
-            onClick={handleToggleAdmin} 
-            className="p-1 rounded-full hover:bg-stone-300/40 text-stone-800 transition-all font-sans text-xs cursor-pointer"
-            title="Lock Admin Dashboard"
-          >
-            🔒
-          </button>
-        )}
-      </div>
+
 
       {/* Slow animated background glowing fluid leaks for Dark mode */}
       {theme === 'dark' && (
@@ -416,7 +375,7 @@ export default function App() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-10 sm:mt-14 transition-colors duration-300 ${
+          className={`relative z-10 flex flex-col md:flex-row justify-between items-center mb-12 border-b pb-6 mt-2 transition-colors duration-300 ${
             theme === 'dark' ? 'border-white/10 text-stone-100' : 
             theme === 'funky' ? 'border-purple-955/60 text-purple-100' : 
             'border-stone-200/60 text-stone-900'
