@@ -1132,22 +1132,13 @@ export default function App() {
       <footer className={`mt-20 border-t py-8 px-4 sm:px-6 lg:px-8 font-sans text-xs transition-colors duration-300 ${
         theme === 'dark' ? 'border-white/10 bg-[#05060A]/80 text-stone-400' : 
         theme === 'funky' ? 'border-purple-955 bg-[#060017] text-purple-400' : 
-        'border-stone-200 bg-stone-50 text-stone-505'
+        'border-stone-200 bg-stone-50 text-stone-500'
       }`}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <nav className="flex flex-wrap gap-x-6 gap-y-2 uppercase tracking-wider font-semibold text-[10px]">
-            <a href="#gallery-controls-console" className="hover:text-amber-500 transition-colors">Gallery</a>
-            <a href="#upcoming-exhibitions-section" className="hover:text-amber-500 transition-colors">Exhibitions</a>
-            <a href="#artist-profile-panel" className="hover:text-amber-500 transition-colors">Biography</a>
-            <a href="#artist-cv-section" className="hover:text-amber-500 transition-colors">CV</a>
-            <a href={`mailto:${artistProfile.email}`} className="hover:text-amber-500 transition-colors">Contact</a>
-          </nav>
-          <div className="flex flex-col md:items-end text-center md:text-right gap-1">
-            <p onDoubleClick={handleToggleAdmin} className="cursor-pointer select-none">© 2026 {artistProfile.name}. All rights reserved.</p>
-            <p className="text-[9px] opacity-75">
-              The Morphiq • A collection of messages from the unknown.
-            </p>
-          </div>
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-1.5">
+          <p onDoubleClick={handleToggleAdmin} className="cursor-pointer select-none font-medium">© 2026 {artistProfile.name}. All rights reserved.</p>
+          <p className="text-[10px] opacity-70 italic font-serif">
+            The Morphiq • A collection of messages from the unknown.
+          </p>
         </div>
       </footer>
 
