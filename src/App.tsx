@@ -616,114 +616,6 @@ export default function App() {
               theme={theme}
             />
           </motion.section>
-
-          {/* Section: Artist CV */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full pt-4"
-          >
-            <div className="bg-stone-50 border border-stone-200/60 p-6 md:p-8 rounded-2xl space-y-8">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/60 pb-4">
-                <div>
-                  <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Artist CV</h3>
-                  <p className="font-sans text-[10px] text-stone-500 uppercase tracking-widest mt-0.5">Professional credentials & archives</p>
-                </div>
-                <a
-                  href="./The_Morphiq_CV.pdf"
-                  download="Husne_Shabnam_CV.pdf"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 border border-stone-850 bg-stone-900 text-white hover:bg-stone-850 font-sans text-[10px] font-bold uppercase tracking-wider rounded-md shadow-xs transition-all cursor-pointer"
-                >
-                  <span>Download CV (PDF)</span>
-                </a>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* Column 1: Exhibitions */}
-                <div className="space-y-4">
-                  <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Exhibitions</h4>
-                  <ul className="space-y-3 font-sans text-xs text-stone-600">
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                      <span className="italic">Silence and Form</span>, Gallerie Metanoia, Paris
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                      <span className="italic">Fossils of a Drifting Mind</span>, The Linen Gallery, New York
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                      <span className="italic">Subconscious Dialogues</span>, Tokyo Art Center, Tokyo
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                      <span className="italic">Collective Memories</span>, Mumbai Contemporary Art Space, Mumbai
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 2: Residencies & Education */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Residencies</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                        Artist-in-Residence, The Quiet Room Residency, Kyoto, Japan
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                        Abstract & Form Fellowship, Brooklyn Art Lab, New York
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Education</h4>
-                    <ul className="space-y-2 font-sans text-xs text-stone-605">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2022</span>
-                        BFA in Visual Arts, Contemporary Art Institute
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Column 3: Publications & Awards */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Publications</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                        "The Art of Slow Looking: Husne Shabnam's Surreal Abstract Worlds" in <span className="italic">Art in Dialogue</span>
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                        "From Silence to Canvas" interview in <span className="italic">Subconscious Art Quarterly</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Awards</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                        The Morphiq Grant for Abstract Visual Art
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                        Emerging Surrealist Artist Award
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.section>
           
           {/* Section: Gallery Works & Curation Panel */}
           <motion.section
@@ -1042,6 +934,115 @@ export default function App() {
             </div>
           </motion.section>
 
+          {/* Section: Artist CV */}
+          <motion.section
+            id="artist-cv-section"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full pt-4"
+          >
+            <div className="bg-stone-50 border border-stone-200/60 p-6 md:p-8 rounded-2xl space-y-8">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/60 pb-4">
+                <div>
+                  <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Artist CV</h3>
+                  <p className="font-sans text-[10px] text-stone-500 uppercase tracking-widest mt-0.5">Professional credentials & archives</p>
+                </div>
+                <a
+                  href="./The_Morphiq_CV.pdf"
+                  download="Husne_Shabnam_CV.pdf"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 border border-stone-850 bg-stone-900 text-white hover:bg-stone-850 font-sans text-[10px] font-bold uppercase tracking-wider rounded-md shadow-xs transition-all cursor-pointer"
+                >
+                  <span>Download CV (PDF)</span>
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Column 1: Exhibitions */}
+                <div className="space-y-4">
+                  <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Exhibitions</h4>
+                  <ul className="space-y-3 font-sans text-xs text-stone-600">
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                      <span className="italic">Silence and Form</span>, Gallerie Metanoia, Paris
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                      <span className="italic">Fossils of a Drifting Mind</span>, The Linen Gallery, New York
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                      <span className="italic">Subconscious Dialogues</span>, Tokyo Art Center, Tokyo
+                    </li>
+                    <li className="leading-relaxed">
+                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                      <span className="italic">Collective Memories</span>, Mumbai Contemporary Art Space, Mumbai
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2: Residencies & Education */}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Residencies</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                        Artist-in-Residence, The Quiet Room Residency, Kyoto, Japan
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                        Abstract & Form Fellowship, Brooklyn Art Lab, New York
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Education</h4>
+                    <ul className="space-y-2 font-sans text-xs text-stone-605">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2022</span>
+                        BFA in Visual Arts, Contemporary Art Institute
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Column 3: Publications & Awards */}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Publications</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                        "The Art of Slow Looking: Husne Shabnam's Surreal Abstract Worlds" in <span className="italic">Art in Dialogue</span>
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
+                        "From Silence to Canvas" interview in <span className="italic">Subconscious Art Quarterly</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Awards</h4>
+                    <ul className="space-y-3 font-sans text-xs text-stone-600">
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
+                        The Morphiq Grant for Abstract Visual Art
+                      </li>
+                      <li className="leading-relaxed">
+                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
+                        Emerging Surrealist Artist Award
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
           {/* Section: Studio Registry Ledger & Contacts */}
           <motion.section
             initial={{ opacity: 0, y: 40 }}
@@ -1126,6 +1127,7 @@ export default function App() {
             <a href="#gallery-controls-console" className="hover:text-amber-500 transition-colors">Gallery</a>
             <a href="#upcoming-exhibitions-section" className="hover:text-amber-500 transition-colors">Exhibitions</a>
             <a href="#artist-profile-panel" className="hover:text-amber-500 transition-colors">Biography</a>
+            <a href="#artist-cv-section" className="hover:text-amber-500 transition-colors">CV</a>
             <a href={`mailto:${artistProfile.email}`} className="hover:text-amber-500 transition-colors">Contact</a>
           </nav>
           <div className="flex flex-col md:items-end text-center md:text-right gap-1">
