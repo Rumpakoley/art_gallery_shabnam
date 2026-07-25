@@ -325,6 +325,34 @@ export default function App() {
       'bg-artist-bg text-stone-900'
     }`}>
       
+      {/* FLOATING HEADER / MENU */}
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center bg-white/90 backdrop-blur-md border border-stone-200/80 shadow-lg rounded-full py-1.5 px-3 sm:px-4 gap-1 sm:gap-2 max-w-[92vw]">
+        <a href="#gallery-controls-console" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
+          gallery
+        </a>
+        <a href="#upcoming-exhibitions-section" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
+          exhibitions
+        </a>
+        <a href="#artist-profile-panel" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
+          biography
+        </a>
+        <a href="#artist-cv-section" className="px-3 py-1.5 rounded-full hover:bg-stone-100 font-sans text-[10px] uppercase font-bold tracking-wider transition-all text-stone-900">
+          cv
+        </a>
+        <a href={`mailto:${artistProfile.email}`} className="px-4 py-1.5 bg-stone-900 hover:bg-stone-850 text-white rounded-full font-sans text-[10px] uppercase font-bold tracking-wider transition-all shadow-sm">
+          contact
+        </a>
+        {isAdmin && (
+          <button 
+            onClick={handleToggleAdmin} 
+            className="px-2 py-1.5 rounded-full hover:bg-stone-100 text-stone-900 transition-all font-sans text-[10px] uppercase font-bold tracking-wider cursor-pointer"
+            title="Lock Admin Dashboard"
+          >
+            🔒
+          </button>
+        )}
+      </div>
+
       {/* Slow animated background glowing fluid leaks for Dark mode */}
       {theme === 'dark' && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -390,37 +418,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Unified Navigation Links */}
-          <nav className={`flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] sm:text-[11px] uppercase tracking-widest font-semibold mt-4 md:mt-0 ${
-            theme === 'dark' ? 'text-stone-300' : 
-            theme === 'funky' ? 'text-purple-305' : 
-            'text-stone-805'
-          }`}>
-            <a href="#gallery-controls-console" className={`pb-1 transition-colors ${
-              theme === 'dark' ? 'border-b border-amber-500 text-stone-100 hover:text-amber-400' : 
-              theme === 'funky' ? 'border-b border-fuchsia-500 text-fuchsia-400 hover:text-fuchsia-300' : 
-              'border-b border-black text-stone-900 hover:text-amber-805'
-            }`}>Gallery</a>
-            <a href="#upcoming-exhibitions-section" className={`opacity-70 hover:opacity-100 transition-colors ${
-              theme === 'dark' ? 'hover:text-amber-400' : 
-              theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
-              'hover:text-stone-500'
-            }`}>Exhibitions</a>
-            <a href="#artist-profile-panel" className={`opacity-70 hover:opacity-100 transition-colors ${
-              theme === 'dark' ? 'hover:text-amber-400' : 
-              theme === 'funky' ? 'hover:text-fuchsia-400 text-glow-neon' : 
-              'hover:text-amber-800'
-            }`}>Biography</a>
-
-            {isAdmin && (
-              <button 
-                onClick={handleToggleAdmin} 
-                className="opacity-70 hover:opacity-100 uppercase text-[10px] sm:text-[11px] font-semibold tracking-widest hover:text-amber-400 transition-colors cursor-pointer"
-              >
-                🔒 Lock
-              </button>
-            )}
-          </nav>
         </motion.header>
         
         {/* Immersive Typographic Exhibition Banner */}
