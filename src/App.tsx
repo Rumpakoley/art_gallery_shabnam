@@ -335,22 +335,10 @@ export default function App() {
           GALLERY
         </a>
         <a 
-          href="#upcoming-exhibitions-section" 
-          className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          EXHIBITIONS
-        </a>
-        <a 
           href="#artist-profile-panel" 
           className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
         >
           BIOGRAPHY
-        </a>
-        <a 
-          href="#artist-cv-section" 
-          className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
-        >
-          CV
         </a>
         <button 
           onClick={() => setIsContactModalOpen(true)} 
@@ -947,185 +935,25 @@ export default function App() {
             </div>
           </motion.section>
 
-          {/* Section: Artist CV */}
-          <motion.section
-            id="artist-cv-section"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full pt-4"
-          >
-            <div className="bg-stone-50 border border-stone-200/60 p-6 md:p-8 rounded-2xl space-y-8">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-stone-200/60 pb-4">
-                <div>
-                  <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Artist CV</h3>
-                  <p className="font-sans text-[10px] text-stone-500 uppercase tracking-widest mt-0.5">Professional credentials & archives</p>
-                </div>
-                <a
-                  href="./The_Morphiq_CV.pdf"
-                  download="Husne_Shabnam_CV.pdf"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 border border-stone-850 bg-stone-900 text-white hover:bg-stone-850 font-sans text-[10px] font-bold uppercase tracking-wider rounded-md shadow-xs transition-all cursor-pointer"
-                >
-                  <span>Download CV (PDF)</span>
-                </a>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* Column 1: Exhibitions */}
-                <div className="space-y-4">
-                  <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Exhibitions</h4>
-                  <ul className="space-y-3 font-sans text-xs text-stone-600">
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                      <span className="italic">Silence and Form</span>, Gallerie Metanoia, Paris
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                      <span className="italic">Fossils of a Drifting Mind</span>, The Linen Gallery, New York
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                      <span className="italic">Subconscious Dialogues</span>, Tokyo Art Center, Tokyo
-                    </li>
-                    <li className="leading-relaxed">
-                      <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                      <span className="italic">Collective Memories</span>, Mumbai Contemporary Art Space, Mumbai
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 2: Residencies & Education */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Residencies</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                        Artist-in-Residence, The Quiet Room Residency, Kyoto, Japan
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                        Abstract & Form Fellowship, Brooklyn Art Lab, New York
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Education</h4>
-                    <ul className="space-y-2 font-sans text-xs text-stone-605">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2022</span>
-                        BFA in Visual Arts, Contemporary Art Institute
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Column 3: Publications & Awards */}
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Publications</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                        "The Art of Slow Looking: Husne Shabnam's Surreal Abstract Worlds" in <span className="italic">Art in Dialogue</span>
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2024</span>
-                        "From Silence to Canvas" interview in <span className="italic">Subconscious Art Quarterly</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h4 className="font-sans text-[10px] font-bold text-amber-800 uppercase tracking-widest border-b border-stone-200/40 pb-1.5">Awards</h4>
-                    <ul className="space-y-3 font-sans text-xs text-stone-600">
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2025</span>
-                        The Morphiq Grant for Abstract Visual Art
-                      </li>
-                      <li className="leading-relaxed">
-                        <span className="font-semibold text-stone-800 block text-[9px] uppercase tracking-wider">2023</span>
-                        Emerging Surrealist Artist Award
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Section: Studio Registry Ledger & Contacts */}
-          <motion.section
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full"
-          >
-            <StudioRegistryPanel
-              profile={artistProfile}
-              paintings={paintings}
-              onOpenPostModal={() => setIsPostModalOpen(true)}
-              isAdmin={isAdmin}
-              onToggleAdmin={handleToggleAdmin}
-              theme={theme}
-            />
-          </motion.section>
-
-          {/* Bottom Section: Upcoming Exhibitions */}
-          <motion.section
-            id="upcoming-exhibitions-section"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className={`p-6 md:p-8 rounded-2xl border transition-colors ${
-              theme === 'dark' ? 'glass-card text-stone-200' : 
-              theme === 'funky' ? 'bg-[#150d2c] border-purple-900/40 text-purple-200 shadow-lg' : 
-              'bg-stone-50 border-stone-200/60 text-stone-900 shadow-xs'
-            }`}
-          >
-            <h3 className={`font-serif text-lg font-bold uppercase tracking-wider mb-6 ${theme === 'dark' ? 'text-stone-105' : ''}`}>
-              <ScrollRevealText text="Upcoming Exhibitions" />
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className={`pb-4 md:pb-0 md:pr-4 border-b md:border-b-0 md:border-r ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                  <ScrollRevealText text="Mindscapes" />
-                </h4>
-                <p className="font-sans text-xs text-stone-400 mt-1">
-                  <ScrollRevealText text="NYC GALLERY" />
-                </p>
-                <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
-                  <ScrollRevealText text="Oct 15 - Nov 10" />
-                </p>
-              </div>
-              <div className={`pb-4 md:pb-0 md:px-4 border-b md:border-b-0 md:border-r ${theme === 'dark' ? 'border-white/10' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                  <ScrollRevealText text="Transformations" />
-                </h4>
-                <p className="font-sans text-xs text-stone-400 mt-1">
-                  <ScrollRevealText text="PARIS GALLERY" />
-                </p>
-                <p className="font-sans text-[10px] tracking-wider text-stone-505 uppercase mt-0.5">
-                  <ScrollRevealText text="Dec 01 - Dec 15" />
-                </p>
-              </div>
-              <div className="md:pl-4">
-                <h4 className="font-serif font-black text-sm uppercase tracking-wide text-amber-500">
-                  <ScrollRevealText text="Subconscious Waves" />
-                </h4>
-                <p className="font-sans text-xs text-stone-400 mt-1">
-                  <ScrollRevealText text="TOKYO ART CENTER" />
-                </p>
-                <p className="font-sans text-[10px] tracking-wider text-stone-500 uppercase mt-0.5">
-                  <ScrollRevealText text="Jan 20 - Feb 10" />
-                </p>
-              </div>
-            </div>
-          </motion.section>
+          {/* Admin Studio Registry Ledger Controls (Visible only to authenticated admins) */}
+          {isAdmin && (
+            <motion.section
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full mt-12"
+            >
+              <StudioRegistryPanel
+                profile={artistProfile}
+                paintings={paintings}
+                onOpenPostModal={() => setIsPostModalOpen(true)}
+                isAdmin={isAdmin}
+                onToggleAdmin={handleToggleAdmin}
+                theme={theme}
+              />
+            </motion.section>
+          )}
         </main>
       </div>
 
