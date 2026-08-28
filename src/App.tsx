@@ -35,7 +35,7 @@ export default function App() {
         const updatedParsed = parsed.map((p) => {
           const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
           if (original) {
-            return { ...p, imageUrl: original.imageUrl };
+            return { ...p, imageUrl: original.imageUrl, medium: original.medium, status: original.status };
           }
           return p;
         });
@@ -167,18 +167,10 @@ export default function App() {
     }
   };
 
-  // Extract unique categories and mediums for filter listing dynamically
+  // Extract categories and mediums for filter listing
   const availableMediums = useMemo(() => {
-    const mediums = paintings.map((p) => {
-      // Group them into higher level buckets for easy grouping
-      if (p.medium.toLowerCase().includes('oil')) return 'Oil';
-      if (p.medium.toLowerCase().includes('water')) return 'Watercolor';
-      if (p.medium.toLowerCase().includes('acrylic')) return 'Acrylic';
-      if (p.medium.toLowerCase().includes('mixed')) return 'Mixed Media';
-      return 'Other';
-    });
-    return ['All', ...Array.from(new Set(mediums))];
-  }, [paintings]);
+    return ['All', 'Ink', 'Pen', 'Acrylic'];
+  }, []);
 
   // Filter and sort paintings selection
   const filteredPaintings = useMemo(() => {
@@ -200,11 +192,10 @@ export default function App() {
     if (mediumFilter !== 'All') {
       result = result.filter((p) => {
         const med = p.medium.toLowerCase();
-        if (mediumFilter === 'Oil') return med.includes('oil');
-        if (mediumFilter === 'Watercolor') return med.includes('water');
+        if (mediumFilter === 'Ink') return med.includes('ink');
+        if (mediumFilter === 'Pen') return med.includes('pen');
         if (mediumFilter === 'Acrylic') return med.includes('acrylic');
-        if (mediumFilter === 'Mixed Media') return med.includes('mixed');
-        return !med.includes('oil') && !med.includes('water') && !med.includes('acrylic') && !med.includes('mixed');
+        return true;
       });
     }
 
@@ -896,24 +887,24 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
               {[
                 {
-                  src: processSketchbook,
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.33_PM_vwnozh.jpg",
                   title: "Sketchbook Explorations",
                   description: "Ink and charcoal markings on paper—where raw visual thoughts first take form in silence."
                 },
                 {
-                  src: processWip,
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.34_PM_o4wuaw.jpg",
                   title: "Work in Progress",
                   description: "An emerging canvas on the studio easel, slowly taking shape under natural light."
                 },
                 {
-                  src: processTexture,
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910633/WhatsApp_Image_2026-08-27_at_9.05.41_PM_yn2qrs.jpg",
                   title: "Close-up Details",
-                  description: "A macro view of thick impasto gesso, warm ochre pigments, and delicate gold leaf."
+                  description: "A macro view of fine ink textures, paper grain, and delicate surreal forms."
                 },
                 {
-                  src: processStudio,
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787911568/WhatsApp_Image_2026-08-27_at_9.05.39_PM_pkg6ne.jpg",
                   title: "Studio Sanctuary",
-                  description: "Canvases leaning against linen walls—a space where intuition is allowed to exist without explanation."
+                  description: "Canvases and drawings in the studio—a space where intuition is allowed to exist without explanation."
                 }
               ].map((item, idx) => (
                 <div 
