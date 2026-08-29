@@ -6,17 +6,18 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Painting, ArtistProfile } from './types';
-import { INITIAL_PAINTINGS, INITIAL_PROFILE } from './data';
+import { INITIAL_PAINTINGS, INITIAL_PROFILE, INITIAL_VIDEOS } from './data';
 import processSketchbook from './assets/images/process_sketchbook.png';
 import processWip from './assets/images/process_wip.png';
 import processTexture from './assets/images/process_texture.png';
 import processStudio from './assets/images/process_studio.png';
 import ArtistProfileSection from './components/ArtistProfileSection';
 import StudioRegistryPanel from './components/StudioRegistryPanel';
+import StudioVideoSection from './components/StudioVideoSection';
 import PaintingCard from './components/PaintingCard';
 import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
-import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X, Mail, Instagram } from 'lucide-react';
+import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X, Mail, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
 
 export default function App() {
@@ -68,6 +69,21 @@ export default function App() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Scroll ref for Creative Process horizontal gallery
+  const processScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollProcessLeft = () => {
+    if (processScrollRef.current) {
+      processScrollRef.current.scrollBy({ left: -340, behavior: 'smooth' });
+    }
+  };
+
+  const scrollProcessRight = () => {
+    if (processScrollRef.current) {
+      processScrollRef.current.scrollBy({ left: 340, behavior: 'smooth' });
+    }
+  };
 
   // Filter and Sorting states
   const [searchQuery, setSearchQuery] = useState('');
@@ -324,6 +340,12 @@ export default function App() {
           className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
         >
           GALLERY
+        </a>
+        <a 
+          href="#studio-videos-section" 
+          className="font-sans text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.16em] text-stone-900 hover:text-amber-800 transition-colors px-1 py-0.5"
+        >
+          VIDEOS
         </a>
         <a 
           href="#artist-profile-panel" 
@@ -875,16 +897,40 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="space-y-8 pt-8 border-t border-stone-200/40"
+            className="space-y-6 pt-8 border-t border-stone-200/40"
           >
-            <div className="text-center space-y-2 max-w-xl mx-auto">
-              <h3 className="font-serif text-xl font-bold tracking-wide text-stone-900">Creative Process</h3>
-              <p className="font-sans text-[11px] italic text-stone-500 leading-relaxed">
-                A glimpse into the quiet sanctuary of the studio—the raw sketches, works in progress, close-up paint textures, and thoughts emerging from silence.
-              </p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 max-w-7xl mx-auto px-1">
+              <div className="space-y-1 text-left">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-stone-900">Creative Process</h3>
+                <p className="font-sans text-[11px] italic text-stone-500 leading-relaxed max-w-xl">
+                  A glimpse into the quiet sanctuary of the studio—raw sketches, works in progress, fine ink textures, and thoughts emerging from silence.
+                </p>
+              </div>
+
+              {/* Scroll Controls */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={scrollProcessLeft}
+                  className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 hover:bg-stone-900 hover:text-white transition-all cursor-pointer"
+                  title="Scroll Left"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={scrollProcessRight}
+                  className="w-9 h-9 rounded-full bg-white border border-stone-200 shadow-xs flex items-center justify-center text-stone-700 hover:bg-stone-900 hover:text-white transition-all cursor-pointer"
+                  title="Scroll Right"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4">
+            {/* Horizontal Scroll Track */}
+            <div
+              ref={processScrollRef}
+              className="flex gap-5 overflow-x-auto pb-4 pt-2 snap-x snap-mandatory scrollbar-none scroll-smooth px-1"
+            >
               {[
                 {
                   src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.33_PM_vwnozh.jpg",
@@ -905,17 +951,37 @@ export default function App() {
                   src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787911568/WhatsApp_Image_2026-08-27_at_9.05.39_PM_pkg6ne.jpg",
                   title: "Studio Sanctuary",
                   description: "Canvases and drawings in the studio—a space where intuition is allowed to exist without explanation."
+                },
+                {
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914652/WhatsApp_Image_2026-08-27_at_9.05.37_PM_uzmoyt.jpg",
+                  title: "Preparatory Ink Studies",
+                  description: "Intuitive ink studies and freehand line explorations capturing raw visual thoughts."
+                },
+                {
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914651/WhatsApp_Image_2026-08-27_at_9.05.36_PM_diijeh.jpg",
+                  title: "Palette & Pigment Studies",
+                  description: "Layering inks, pens, and acrylic pigments directly onto paper and panel."
+                },
+                {
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914651/WhatsApp_Image_2026-08-27_at_9.05.38_PM_bguwks.jpg",
+                  title: "Outdoor Sketchbook Journal",
+                  description: "Drawing in open natural settings—capturing fluid organic forms and sea mist."
+                },
+                {
+                  src: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914652/WhatsApp_Image_2026-08-27_at_9.05.32_PM_d8v66t.jpg",
+                  title: "Studio Work Table",
+                  description: "Handmade ink markers, pens, and sketchbook studies resting in the studio."
                 }
               ].map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="group relative overflow-hidden bg-stone-100 rounded-sm aspect-square cursor-pointer shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgb(0,0,0,0.06)] transition-all duration-500 hover:-translate-y-1"
+                  className="shrink-0 w-[260px] sm:w-[300px] md:w-[320px] aspect-square snap-center group relative overflow-hidden bg-stone-100 rounded-2xl cursor-pointer shadow-[0_8px_25px_rgb(0,0,0,0.04)] hover:shadow-[0_15px_35px_rgb(0,0,0,0.08)] transition-all duration-500 hover:-translate-y-1"
                   onClick={() => setSelectedProcessImage(item)}
                 >
                   <img
                     src={item.src}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-stone-900/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-white">
                     <h5 className="font-serif text-[11px] font-bold uppercase tracking-wider">{item.title}</h5>
@@ -925,6 +991,9 @@ export default function App() {
               ))}
             </div>
           </motion.section>
+
+          {/* Section: Studio Videos & Reels */}
+          <StudioVideoSection videos={INITIAL_VIDEOS} theme={theme} />
 
           {/* Admin Studio Registry Ledger Controls (Visible only to authenticated admins) */}
           {isAdmin && (

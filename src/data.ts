@@ -15,6 +15,30 @@ import painting6 from './assets/images/painting_6.jpg';
 import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
 
+export const INITIAL_VIDEOS: StudioVideo[] = [
+  {
+    id: "video-1",
+    title: "Intuitive Ink Movements & Silence",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/Dbk3BGyvJpp/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.33_PM_vwnozh.jpg"
+  },
+  {
+    id: "video-2",
+    title: "Pigment & Texture Layering",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/DW8QqW-DOoh/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.34_PM_o4wuaw.jpg"
+  },
+  {
+    id: "video-3",
+    title: "Canvas Transformation Live",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/DI1qHlQya0n/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910633/WhatsApp_Image_2026-08-27_at_9.05.41_PM_yn2qrs.jpg"
+  }
+];
+
 export const INITIAL_PROFILE: ArtistProfile = {
   name: "Husne Shabnam",
   title: "Visual Artist",

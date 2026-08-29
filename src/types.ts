@@ -27,3 +27,12 @@ export interface ArtistProfile {
   instagram: string;
   email: string;
 }
+
+export interface StudioVideo {
+  id: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  posterUrl?: string;
+  duration?: string;
+}
