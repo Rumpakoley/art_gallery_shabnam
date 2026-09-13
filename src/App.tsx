@@ -19,7 +19,7 @@ import PaintingDetailModal from './components/PaintingDetailModal';
 import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X, Mail, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
-import FlowerCursorTrail from './components/FlowerCursorTrail';
+import SunflowerCursor from './components/SunflowerCursor';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -361,8 +361,8 @@ export default function App() {
       theme === 'funky' ? 'bg-[#0a0418] text-purple-200' : 
       'bg-artist-bg text-stone-900'
     }`}>
-      {/* Interactive Surrealist Flower Cursor Particle Trail */}
-      <FlowerCursorTrail />
+      {/* Single Unified Sunflower Cursor for Phone & Desktop */}
+      <SunflowerCursor />
       
       {/* FLOATING HEADER / MENU */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center bg-[#FAF3E4]/95 backdrop-blur-md border border-[#E8DEC7] shadow-[0_8px_30px_rgba(0,0,0,0.08)] rounded-full py-1.5 px-4 sm:px-6 gap-3 sm:gap-5 max-w-[95vw]">
