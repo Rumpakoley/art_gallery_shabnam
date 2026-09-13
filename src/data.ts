@@ -14,6 +14,7 @@ import painting5 from './assets/images/painting_5.jpg';
 import painting6 from './assets/images/painting_6.jpg';
 import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
+import painting9 from './assets/images/painting_9.jpg';
 
 export const INITIAL_VIDEOS: StudioVideo[] = [
   {
@@ -36,6 +37,27 @@ export const INITIAL_VIDEOS: StudioVideo[] = [
     description: "Watch studio process reel on Instagram @themorphiq",
     videoUrl: "https://www.instagram.com/reel/DI1qHlQya0n/",
     posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910633/WhatsApp_Image_2026-08-27_at_9.05.41_PM_yn2qrs.jpg"
+  },
+  {
+    id: "video-4",
+    title: "Surreal Form Explorations",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/DLh8hidyFbH/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787911568/WhatsApp_Image_2026-08-27_at_9.05.39_PM_pkg6ne.jpg"
+  },
+  {
+    id: "video-5",
+    title: "Freehand Line Drawings",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/DXJh8FMjOri/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914652/WhatsApp_Image_2026-08-27_at_9.05.37_PM_uzmoyt.jpg"
+  },
+  {
+    id: "video-6",
+    title: "Studio Reflections & Color Flow",
+    description: "Watch studio process reel on Instagram @themorphiq",
+    videoUrl: "https://www.instagram.com/reel/DH1CX8xS6P9/",
+    posterUrl: "https://res.cloudinary.com/dpdtsaalf/image/upload/v1787914651/WhatsApp_Image_2026-08-27_at_9.05.36_PM_diijeh.jpg"
   }
 ];
 
@@ -161,5 +183,19 @@ export const INITIAL_PAINTINGS: Painting[] = [
     status: "Available",
     collection: "Fossils of a Drifting Mind",
     createdAt: "2026-05-30T09:00:00Z"
+  },
+  {
+    id: "painting-9",
+    title: "The Silent Watchers",
+    medium: "Acrylic, Pen & Ink on Canvas",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "24 x 30 inches",
+    description: "Surreal crimson figures and watchful eye motifs rising from geometric patterns against deep forest green—a contemplative visual dialogue on consciousness, vulnerability, and unseen presence.",
+    imageUrl: painting9,
+    price: 4200,
+    status: "Available",
+    collection: "Whispers of the Subconscious",
+    createdAt: "2026-09-01T12:00:00Z"
   }
 ];
