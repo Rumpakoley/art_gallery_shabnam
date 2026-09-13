@@ -186,16 +186,16 @@ export const INITIAL_PAINTINGS: Painting[] = [
   },
   {
     id: "painting-9",
-    title: "The Silent Watchers",
+    title: "The Omnipresent Lens",
     medium: "Acrylic, Pen & Ink on Canvas",
     category: "Abstract",
     year: 2026,
     dimensions: "24 x 30 inches",
-    description: "Surreal crimson figures and watchful eye motifs rising from geometric patterns against deep forest green—a contemplative visual dialogue on consciousness, vulnerability, and unseen presence.",
+    description: "Surreal crimson figures and watchful eye motifs rising from geometric patterns against deep forest green—an exploration of dreams, memory, and transformation.",
     imageUrl: painting9,
     price: 4200,
     status: "Available",
-    collection: "Whispers of the Subconscious",
+    collection: "Fossils of a Drifting Mind",
     createdAt: "2026-09-01T12:00:00Z"
   }
 ];

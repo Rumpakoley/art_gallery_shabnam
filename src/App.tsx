@@ -27,16 +27,25 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Sync and merge with INITIAL_PAINTINGS:
-        // 1. Update imageUrl for existing default paintings to prevent caching issues.
-        // 2. Add any newly introduced default paintings that are not yet in localStorage.
-        const parsedIds = new Set(parsed.map((p) => p.id));
+        // Filter out any broken custom entry created in browser for Omnipresent to use official asset
+        const sanitized = parsed.filter(
+          (p) => !p.id.startsWith('painting-custom-') || !p.title.toLowerCase().includes('omnipresent')
+        );
+
+        const parsedIds = new Set(sanitized.map((p) => p.id));
         const missingDefaults = INITIAL_PAINTINGS.filter((p) => !parsedIds.has(p.id));
 
-        const updatedParsed = parsed.map((p) => {
+        const updatedParsed = sanitized.map((p) => {
           const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
           if (original) {
-            return { ...p, imageUrl: original.imageUrl, medium: original.medium, status: original.status };
+            return {
+              ...p,
+              imageUrl: original.imageUrl,
+              medium: original.medium,
+              status: original.status,
+              collection: original.collection,
+              title: original.title
+            };
           }
           return p;
         });
