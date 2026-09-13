@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Painting } from '../types';
 import { X, Upload, Check, Image as ImageIcon, SlidersHorizontal, Sliders, DollarSign, Plus } from 'lucide-react';
@@ -58,6 +58,14 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const [price, setPrice] = useState('1200');
   const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>('Available');
   const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>('Fossils of a Drifting Mind');
+
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
   
   // Image handling
   const [customUrl, setCustomUrl] = useState('');

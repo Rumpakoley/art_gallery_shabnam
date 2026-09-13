@@ -114,6 +114,17 @@ export default function App() {
     localStorage.setItem('artist_paintings_archive', JSON.stringify(paintings));
   }, [paintings]);
 
+  // Lock background scroll when any modal is open on mobile & desktop
+  useEffect(() => {
+    if (selectedPainting || isPostModalOpen || selectedProcessImage || isContactModalOpen) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [selectedPainting, isPostModalOpen, selectedProcessImage, isContactModalOpen]);
+
   // Clean toast notices automatically
   useEffect(() => {
     if (toastMessage) {

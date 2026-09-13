@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Painting } from '../types';
 import { X, Calendar, SlidersHorizontal, ArrowRight, CheckCircle2, Mail, Info, Layers, Home, Palette } from 'lucide-react';
@@ -21,6 +21,15 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
   const [inquiryMsg, setInquiryMsg] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Lock background body scroll when modal is open so only the modal scrolls on mobile
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
 
   // Visualizer interactive states
   const [frameStyle, setFrameStyle] = useState<'canvas' | 'oak' | 'black' | 'gold'>('oak');
@@ -50,15 +59,25 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-stone-955/75 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain flex items-start sm:items-center justify-center p-2 sm:p-4 bg-stone-955/80 backdrop-blur-xs">
         {/* Backdrop overlay */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 cursor-zoom-out"
+          className="fixed inset-0 cursor-zoom-out"
         />
+
+        {/* Floating Fixed Close Button */}
+        <button
+          onClick={onClose}
+          className="fixed top-3 right-3 sm:top-5 sm:right-5 z-50 p-2.5 sm:p-3 rounded-full bg-stone-900/90 hover:bg-black text-white border border-white/25 shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95 flex items-center justify-center backdrop-blur-md"
+          aria-label="Close details"
+          title="Close window"
+        >
+          <X className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+        </button>
 
         {/* Modal Window Container */}
         <motion.div
@@ -66,28 +85,14 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative border rounded-xl overflow-hidden max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 min-h-[500px] transition-all duration-300 ${
+          className={`relative border rounded-2xl overflow-hidden max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 my-auto shadow-2xl transition-all duration-300 ${
             theme === 'dark' 
               ? 'bg-[#0E0D0C] border-stone-850 text-stone-100 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.85)]' :
             theme === 'funky'
               ? 'bg-[#150d2c] border-purple-900/60 text-purple-200 shadow-[0_25px_50px_-12px_rgba(127,0,255,0.4)]'
-              : 'bg-stone-50 border-stone-200/80 text-stone-900 shadow-2xl'
+              : 'bg-stone-50 border-stone-200/80 text-stone-900'
           }`}
         >
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className={`absolute top-4 right-4 z-20 p-2 rounded-full transition-all border cursor-pointer shadow-xs ${
-              theme === 'dark'
-                ? 'bg-stone-900 border-stone-800 text-stone-400 hover:text-stone-100 hover:bg-stone-800' :
-              theme === 'funky'
-                ? 'bg-purple-955/80 border-purple-800 text-fuchsia-400 hover:text-fuchsia-200 hover:bg-purple-900/90 hover:shadow-[0_0_10px_rgba(236,72,153,0.4)]'
-                : 'bg-stone-100/90 border-stone-200 text-stone-700 hover:text-stone-900 hover:bg-stone-200/90'
-            }`}
-            aria-label="Close details"
-          >
-            <X className="w-5 h-5" />
-          </button>
 
           {/* Left Panel: Fine Art Frame Showcase / Interactive Wall Visualizer (7 cols on md) */}
           <div className={`md:col-span-7 p-6 md:p-8 flex flex-col items-center justify-between border-b md:border-b-0 md:border-r transition-colors duration-300 relative ${
@@ -347,7 +352,7 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
           </div>
 
           {/* Right Panel: Curatorial Info & Interactive Commission / Inquiry (5 cols) */}
-          <div className={`md:col-span-5 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[85vh] md:max-h-[650px] transition-colors duration-300 ${
+          <div className={`md:col-span-5 p-5 sm:p-6 md:p-8 flex flex-col justify-between md:overflow-y-auto md:max-h-[700px] transition-colors duration-300 ${
             theme === 'dark' ? 'bg-[#131211] text-stone-200' :
             theme === 'funky' ? 'bg-[#12072b] text-purple-200 border-l border-purple-900/30' :
             'bg-white text-stone-900'
@@ -565,6 +570,18 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
                     </button>
                   </form>
                 )}
+              </div>
+
+              {/* Mobile-only Bottom Close Button */}
+              <div className="block md:hidden pt-6 pb-2 border-t border-stone-200/50 mt-6">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full py-3 px-4 rounded-xl font-sans text-xs font-bold uppercase tracking-wider text-stone-700 hover:text-stone-900 bg-stone-200/80 hover:bg-stone-300 border border-stone-300/80 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
+                >
+                  <X className="w-4 h-4 stroke-[2.5]" />
+                  <span>Close Window</span>
+                </button>
               </div>
             </div>
           </div>
