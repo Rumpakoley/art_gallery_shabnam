@@ -59,14 +59,6 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>('Available');
   const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>('Fossils of a Drifting Mind');
 
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-  
   // Image handling
   const [customUrl, setCustomUrl] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);

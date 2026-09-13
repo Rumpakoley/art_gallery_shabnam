@@ -114,15 +114,23 @@ export default function App() {
     localStorage.setItem('artist_paintings_archive', JSON.stringify(paintings));
   }, [paintings]);
 
-  // Lock background scroll when any modal is open on mobile & desktop
+  // Lock background scroll when any modal is open on mobile & desktop, and cleanly release on close
   useEffect(() => {
-    if (selectedPainting || isPostModalOpen || selectedProcessImage || isContactModalOpen) {
-      const original = document.body.style.overflow;
+    const isModalOpen = Boolean(selectedPainting || isPostModalOpen || selectedProcessImage || isContactModalOpen);
+    if (isModalOpen) {
       document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = original;
-      };
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow');
     }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.removeProperty('overflow');
+      document.documentElement.style.removeProperty('overflow');
+    };
   }, [selectedPainting, isPostModalOpen, selectedProcessImage, isContactModalOpen]);
 
   // Clean toast notices automatically

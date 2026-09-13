@@ -22,15 +22,6 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Lock background body scroll when modal is open so only the modal scrolls on mobile
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   // Visualizer interactive states
   const [frameStyle, setFrameStyle] = useState<'canvas' | 'oak' | 'black' | 'gold'>('oak');
   const [viewMode, setViewMode] = useState<'frame' | 'wall'>('frame');
