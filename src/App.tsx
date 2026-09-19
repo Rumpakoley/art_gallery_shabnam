@@ -20,6 +20,7 @@ import PostWorkModal from './components/PostWorkModal';
 import { Search, SlidersHorizontal, Sliders, Sparkles, CheckCircle2, Paintbrush, ArrowUpDown, X, Mail, Instagram, ChevronLeft, ChevronRight } from 'lucide-react';
 import ScrollRevealText from './components/ScrollRevealText';
 import SunflowerCursor from './components/SunflowerCursor';
+import CollectionCarousel from './components/CollectionCarousel';
 
 export default function App() {
   // Load paintings & profile from localStorage or fallback
@@ -803,7 +804,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Gallery Paintings Grid list */}
+            {/* Gallery Paintings Single-Line Horizontal Scroll list */}
             <div className="space-y-16">
               {[
                 {
@@ -823,33 +824,15 @@ export default function App() {
                 if (collectionPaintings.length === 0) return null;
 
                 return (
-                  <div key={col.name} className="space-y-6 pt-12 border-t border-stone-200/40 first:border-0 first:pt-0">
-                    <div className="space-y-1">
-                      <h3 className="font-serif text-lg font-bold tracking-wider text-stone-900 uppercase">
-                        {col.name}
-                      </h3>
-                      <p className="font-sans text-[11px] italic text-stone-500 max-w-2xl leading-relaxed">
-                        {col.description}
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      layout
-                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pt-4"
-                    >
-                      <AnimatePresence mode="popLayout">
-                        {collectionPaintings.map((painting) => (
-                          <PaintingCard
-                            key={painting.id}
-                            painting={painting}
-                            onViewDetails={setSelectedPainting}
-                            theme={theme}
-                            isAdmin={isAdmin}
-                          />
-                        ))}
-                      </AnimatePresence>
-                    </motion.div>
-                  </div>
+                  <CollectionCarousel
+                    key={col.name}
+                    title={col.name}
+                    description={col.description}
+                    paintings={collectionPaintings}
+                    onViewDetails={setSelectedPainting}
+                    theme={theme}
+                    isAdmin={isAdmin}
+                  />
                 );
               })}
 
@@ -861,33 +844,14 @@ export default function App() {
                 if (unassignedPaintings.length === 0) return null;
 
                 return (
-                  <div className="space-y-6 pt-12 border-t border-stone-200/40">
-                    <div className="space-y-1">
-                      <h3 className="font-serif text-lg font-bold tracking-wider text-stone-900 uppercase">
-                        Other Archives & Independent Studies
-                      </h3>
-                      <p className="font-sans text-[11px] italic text-stone-500 max-w-2xl leading-relaxed">
-                        Various independent visual abstractions and sketch studies.
-                      </p>
-                    </div>
-
-                    <motion.div 
-                      layout
-                      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 pt-4"
-                    >
-                      <AnimatePresence mode="popLayout">
-                        {unassignedPaintings.map((painting) => (
-                          <PaintingCard
-                            key={painting.id}
-                            painting={painting}
-                            onViewDetails={setSelectedPainting}
-                            theme={theme}
-                            isAdmin={isAdmin}
-                          />
-                        ))}
-                      </AnimatePresence>
-                    </motion.div>
-                  </div>
+                  <CollectionCarousel
+                    title="Other Archives & Independent Studies"
+                    description="Various independent visual abstractions and sketch studies."
+                    paintings={unassignedPaintings}
+                    onViewDetails={setSelectedPainting}
+                    theme={theme}
+                    isAdmin={isAdmin}
+                  />
                 );
               })()}
             </div>
