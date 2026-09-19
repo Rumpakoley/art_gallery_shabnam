@@ -15,7 +15,6 @@ import painting6 from './assets/images/painting_6.jpg';
 import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
 import painting9 from './assets/images/painting_9.jpg';
-import painting10 from './assets/images/painting_10.jpg';
 
 export const INITIAL_VIDEOS: StudioVideo[] = [
   {
@@ -198,19 +197,5 @@ export const INITIAL_PAINTINGS: Painting[] = [
     status: "Available",
     collection: "Fossils of a Drifting Mind",
     createdAt: "2026-09-01T12:00:00Z"
-  },
-  {
-    id: "painting-10",
-    title: "Meditations in Monochrome",
-    medium: "Ink & Fine Line Pen on Paper",
-    category: "Abstract",
-    year: 2026,
-    dimensions: "24 x 36 inches",
-    description: "An intricate black and white surrealist study interweaving human faces, organic textures, and microscopic line networks.",
-    imageUrl: painting10,
-    price: 3600,
-    status: "Available",
-    collection: "Fossils of a Drifting Mind",
-    createdAt: "2026-09-15T12:00:00Z"
   }
 ];
