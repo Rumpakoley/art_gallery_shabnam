@@ -29,10 +29,20 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Filter out any broken custom entry created in browser for Omnipresent to use official asset
-        const sanitized = parsed.filter(
-          (p) => !p.id.startsWith('painting-custom-') || !p.title.toLowerCase().includes('omnipresent')
-        );
+        // Filter out any broken custom entries (e.g. draft test posts with expired blob URLs)
+        const sanitized = parsed.filter((p) => {
+          if (p.id.startsWith('painting-custom-')) {
+            if (
+              !p.imageUrl ||
+              p.imageUrl.startsWith('blob:') ||
+              p.title.toLowerCase().includes('draft') ||
+              p.title.toLowerCase().includes('omnipresent')
+            ) {
+              return false;
+            }
+          }
+          return true;
+        });
 
         const parsedIds = new Set(sanitized.map((p) => p.id));
         const missingDefaults = INITIAL_PAINTINGS.filter((p) => !parsedIds.has(p.id));

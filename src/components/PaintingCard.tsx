@@ -70,6 +70,13 @@ export default function PaintingCard({
           src={painting.imageUrl}
           alt={painting.title}
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (!target.dataset.failed) {
+              target.dataset.failed = 'true';
+              target.src = 'https://res.cloudinary.com/dpdtsaalf/image/upload/v1787910634/WhatsApp_Image_2026-08-27_at_9.05.33_PM_vwnozh.jpg';
+            }
+          }}
           className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] ${
             theme === 'dark' ? 'rounded-[10px]' : ''
           }`}
