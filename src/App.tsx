@@ -29,13 +29,10 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Filter out expired blob URLs and painting-10
+        // Filter out expired blob URLs and draft test entries
         const sanitized = parsed.filter((p) => {
-          if (p.id === 'painting-10' || p.title?.includes('Meditations in Monochrome')) {
-            return false;
-          }
           if (p.id.startsWith('painting-custom-')) {
-            if (!p.imageUrl || p.imageUrl.startsWith('blob:')) {
+            if (!p.imageUrl || p.imageUrl.startsWith('blob:') || p.title?.toLowerCase().includes('draft')) {
               return false;
             }
           }
@@ -111,7 +108,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-asc' | 'price-desc'
 
   const featuredList = useMemo(() => {
-    const ids = ['painting-9', 'painting-8', 'painting-7', 'painting-6', 'painting-5'];
+    const ids = ['painting-10', 'painting-9', 'painting-8', 'painting-7', 'painting-6', 'painting-5'];
     const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
     if (selected.length === 0) {
       return paintings.slice(0, 4);
