@@ -29,15 +29,10 @@ export default function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Painting[];
-        // Filter out any broken custom entries (e.g. draft test posts with expired blob URLs)
+        // Filter out only expired temporary blob URLs
         const sanitized = parsed.filter((p) => {
           if (p.id.startsWith('painting-custom-')) {
-            if (
-              !p.imageUrl ||
-              p.imageUrl.startsWith('blob:') ||
-              p.title.toLowerCase().includes('draft') ||
-              p.title.toLowerCase().includes('omnipresent')
-            ) {
+            if (!p.imageUrl || p.imageUrl.startsWith('blob:')) {
               return false;
             }
           }

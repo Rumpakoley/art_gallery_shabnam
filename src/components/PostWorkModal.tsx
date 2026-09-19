@@ -64,14 +64,63 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
   const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0); // Default to first preset
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const processAndSetFile = async (file: File) => {
+    setIsProcessingImage(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            setUploadedImageUrl(dataUrl);
+          } else {
+            setUploadedImageUrl(e.target?.result as string);
+          }
+          setSelectedPresetIndex(null);
+          setIsProcessingImage(false);
+        };
+        img.onerror = () => {
+          setUploadedImageUrl(e.target?.result as string);
+          setSelectedPresetIndex(null);
+          setIsProcessingImage(false);
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    } catch {
+      setIsProcessingImage(false);
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const localUrl = URL.createObjectURL(file);
-      setUploadedImageUrl(localUrl);
-      setSelectedPresetIndex(null); // Clear preset if file is selected
+      processAndSetFile(e.target.files[0]);
     }
   };
 
@@ -88,10 +137,7 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
     e.preventDefault();
     setIsDragOver(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      const localUrl = URL.createObjectURL(file);
-      setUploadedImageUrl(localUrl);
-      setSelectedPresetIndex(null);
+      processAndSetFile(e.dataTransfer.files[0]);
     }
   };
 
