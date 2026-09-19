@@ -108,7 +108,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-asc' | 'price-desc'
 
   const featuredList = useMemo(() => {
-    const ids = ['painting-9', 'painting-8', 'painting-7', 'painting-6', 'painting-5'];
+    const ids = ['painting-10', 'painting-9', 'painting-8', 'painting-7', 'painting-6', 'painting-5'];
     const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
     if (selected.length === 0) {
       return paintings.slice(0, 4);
