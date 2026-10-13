@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useRef } from 'react';
+import { motion } from 'motion/react';
 import { Painting } from '../types';
-import { X, Upload, Check, Image as ImageIcon, SlidersHorizontal, Sliders, DollarSign, Plus } from 'lucide-react';
+import { X, Upload, Check, Image as ImageIcon, Plus, Camera } from 'lucide-react';
 
 interface PostWorkModalProps {
   onClose: () => void;
@@ -38,81 +38,78 @@ const STYLE_PRESETS = [
     name: "Celestial Void",
     genre: "Oil & Gilded Gold",
     url: "https://picsum.photos/seed/celestialvoid/1200/900",
-    description: "A cosmic, meditative circlescape painted in ultra-matte carbon black, framed by hand-applied 23k genuine metal gold leaf detail."
+    description: "A dark minimal canvas punctuated by genuine gold leaf fractals that reflect dynamic candlelight in personal collections."
   },
   {
-    name: "Misty Woodlands",
-    genre: "Watercolor",
-    url: "https://picsum.photos/seed/mistywoods/1200/900",
-    description: "A soft, bleeding forest watercolor exploration using mineral cobalt blue and burnt sienna pigments on heavy cold-press cotton."
+    name: "Tuscan Portico",
+    genre: "Watercolor & Gouache",
+    url: "https://picsum.photos/seed/tuscanport/1200/900",
+    description: "Sun-drenched architectural watercolor capturing stucco textures, terra cotta tiles, and sharp violet afternoon shadows."
   }
 ];
 
 export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostWorkModalProps) {
   const [title, setTitle] = useState('');
-  const [medium, setMedium] = useState('Oil on Canvas');
-  const [category, setCategory] = useState('Landscape');
+  const [medium, setMedium] = useState('Ink & Acrylic on Canvas');
+  const [category, setCategory] = useState('Abstract');
   const [year, setYear] = useState(2026);
   const [dimensions, setDimensions] = useState('24 x 36 inches');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('1200');
+  const [price, setPrice] = useState('1800');
   const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>('Available');
   const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>('Fossils of a Drifting Mind');
-
+  
   // Image handling
   const [customUrl, setCustomUrl] = useState('');
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0); // Default to first preset
+  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const processAndSetFile = async (file: File) => {
+  const processAndSetFile = (file: File) => {
     setIsProcessingImage(true);
     try {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
-          let width = img.width;
-          let height = img.height;
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const MAX_WIDTH = 1200;
+        const MAX_HEIGHT = 1200;
+        let width = img.width;
+        let height = img.height;
 
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height = Math.round((height * MAX_WIDTH) / width);
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width = Math.round((width * MAX_HEIGHT) / height);
-              height = MAX_HEIGHT;
-            }
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
           }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
 
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-            setUploadedImageUrl(dataUrl);
-          } else {
-            setUploadedImageUrl(e.target?.result as string);
-          }
-          setSelectedPresetIndex(null);
-          setIsProcessingImage(false);
-        };
-        img.onerror = () => {
-          setUploadedImageUrl(e.target?.result as string);
-          setSelectedPresetIndex(null);
-          setIsProcessingImage(false);
-        };
-        img.src = e.target?.result as string;
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+          setUploadedImageUrl(dataUrl);
+        } else {
+          setUploadedImageUrl(objectUrl);
+        }
+        URL.revokeObjectURL(objectUrl);
+        setSelectedPresetIndex(null);
+        setIsProcessingImage(false);
       };
-      reader.readAsDataURL(file);
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        setIsProcessingImage(false);
+      };
+      img.src = objectUrl;
     } catch {
       setIsProcessingImage(false);
     }
@@ -121,6 +118,9 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       processAndSetFile(e.target.files[0]);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -149,15 +149,11 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
     setSelectedPresetIndex(idx);
     setUploadedImageUrl(null);
     setCustomUrl('');
-    // Auto-fill some fields based on preset to feel polished!
     const preset = STYLE_PRESETS[idx];
-    setTitle(`Study: ${preset.name}`);
-    setDescription(preset.description);
-  };
-
-  const handleCustomUrlFocus = () => {
-    setSelectedPresetIndex(null);
-    setUploadedImageUrl(null);
+    if (!title || title.startsWith('Study:')) {
+      setTitle(`Study: ${preset.name}`);
+      setDescription(preset.description);
+    }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -195,19 +191,32 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain flex items-start sm:items-center justify-center p-2 sm:p-4 bg-stone-900/75 backdrop-blur-xs">
+      {/* Backdrop overlay */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 cursor-zoom-out"
+        className="fixed inset-0 cursor-zoom-out"
       />
 
+      {/* Floating Close Button for Mobile & Desktop */}
+      <button
+        onClick={onClose}
+        className="fixed top-3 right-3 sm:top-5 sm:right-5 z-50 p-2.5 sm:p-3 rounded-full bg-stone-900/90 hover:bg-black text-white border border-white/20 shadow-2xl transition-all cursor-pointer flex items-center justify-center backdrop-blur-md active:scale-95"
+        aria-label="Close"
+        title="Close window"
+      >
+        <X className="w-5 h-5 stroke-[2.5]" />
+      </button>
+
+      {/* Main Modal Window */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className={`relative border overflow-hidden w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 max-h-[90vh] transition-all duration-300 rounded-xl ${
+        className={`relative border w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 rounded-2xl my-auto transition-all duration-300 shadow-2xl md:max-h-[88vh] md:overflow-hidden ${
           theme === 'dark'
             ? 'bg-[#0E0D0C] border-stone-850 text-stone-100 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.85)]' :
           theme === 'funky'
@@ -215,50 +224,54 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
             : 'bg-white border-stone-200 shadow-2xl text-stone-900'
         }`}
       >
-        {/* Header bar close button */}
-        <div className="absolute top-4 right-4 z-10">
-          <button
-            onClick={onClose}
-            className={`p-2 rounded-full cursor-pointer transition-colors border ${
-              theme === 'dark'
-                ? 'bg-stone-900 border-stone-800 text-stone-400 hover:text-stone-100 hover:bg-stone-800' :
-              theme === 'funky'
-                ? 'bg-purple-955/80 border-purple-800 text-fuchsia-400 hover:text-fuchsia-200 hover:bg-purple-900/90'
-                : 'bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-900 border-stone-200/60'
-            }`}
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Hidden Native File Input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
 
-        {/* Left Column: Visual Canvas Selection (4 cols) */}
-        <div className={`md:col-span-5 p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r transition-colors duration-300 ${
+        {/* Left Column: Visual Canvas & Instant Photo Upload (5 cols on desktop) */}
+        <div className={`md:col-span-5 p-5 sm:p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r md:overflow-y-auto md:max-h-[88vh] transition-colors duration-300 ${
           theme === 'dark' ? 'bg-[#121110] border-stone-850' :
           theme === 'funky' ? 'bg-[#0a0418] border-purple-900/40' :
           'bg-stone-50 border-stone-200'
         }`}>
-          <div className="space-y-5">
-            <div className="flex items-center gap-2">
-              <span className={`p-1 px-2.5 font-sans text-[10px] font-semibold tracking-wider rounded-sm border uppercase ${
-                theme === 'dark' ? 'bg-stone-900 text-amber-450 border-stone-850' :
-                theme === 'funky' ? 'bg-purple-950/60 text-fuchsia-400 border-purple-800/40 text-glow-neon' :
-                'bg-amber-50 text-amber-800 border-amber-200/50'
-              }`}>
-                Studio Mode
-              </span>
-              <h3 className={`font-serif text-lg font-semibold ${
-                theme === 'dark' ? 'text-stone-100' :
-                theme === 'funky' ? 'text-purple-100 font-bold' :
-                'text-stone-950'
-              }`}>Artwork Canvas</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className={`p-1 px-2.5 font-sans text-[10px] font-semibold tracking-wider rounded-sm border uppercase ${
+                  theme === 'dark' ? 'bg-stone-900 text-amber-450 border-stone-850' :
+                  theme === 'funky' ? 'bg-purple-950/60 text-fuchsia-400 border-purple-800/40 text-glow-neon' :
+                  'bg-amber-50 text-amber-800 border-amber-200/50'
+                }`}>
+                  Studio Mode
+                </span>
+                <h3 className="font-serif text-lg font-semibold">Artwork Canvas</h3>
+              </div>
             </div>
 
-            {/* Preview of active visual */}
-            <div className={`relative aspect-3/4 rounded-lg overflow-hidden border shadow-inner flex items-center justify-center transition-colors duration-300 ${
-              theme === 'dark' ? 'bg-stone-900 border-stone-850' :
-              theme === 'funky' ? 'bg-purple-950/40 border-purple-900/50 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]' :
-              'bg-stone-100 border-stone-200'
-            }`}>
+            {/* Interactive Preview of active visual */}
+            <div
+              onClick={triggerFileSelect}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`group relative aspect-4/3 sm:aspect-3/4 max-h-[220px] sm:max-h-[340px] rounded-xl overflow-hidden border-2 transition-all cursor-pointer shadow-inner flex items-center justify-center ${
+                isDragOver
+                  ? 'border-amber-500 scale-[1.01]'
+                  : uploadedImageUrl
+                  ? 'border-emerald-500/80 shadow-md'
+                  : theme === 'dark'
+                  ? 'bg-stone-900 border-stone-800'
+                  : theme === 'funky'
+                  ? 'bg-purple-950/40 border-purple-900/50'
+                  : 'bg-stone-100 border-stone-200'
+              }`}
+              title="Click to choose or change artwork photo"
+            >
               {uploadedImageUrl ? (
                 <img src={uploadedImageUrl} alt="Uploaded painting" className="w-full h-full object-cover" />
               ) : customUrl ? (
@@ -268,20 +281,57 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
               ) : (
                 <div className="text-stone-400 text-center p-4">
                   <ImageIcon className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                  <p className="font-sans text-xs">No Canvas Selected</p>
+                  <p className="font-sans text-xs">Tap to Choose Artwork</p>
                 </div>
               )}
-              <div className="absolute bottom-2 left-2 bg-black/60 text-[10px] text-white px-2 py-0.5 rounded-sm backdrop-blur-xs font-mono">
-                LIVE CANVAS PREVIEW
+
+              {/* Tap to change overlay */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-sans text-xs font-semibold backdrop-blur-2xs">
+                <Camera className="w-4 h-4" />
+                <span>Tap to change photo</span>
+              </div>
+
+              <div className="absolute bottom-2 left-2 bg-black/70 text-[9px] text-white px-2 py-0.5 rounded-sm backdrop-blur-xs font-mono">
+                {uploadedImageUrl ? '✓ YOUR ARTWORK' : 'PREVIEW'}
               </div>
             </div>
 
+            {/* Prominent Instant Upload Button for Phone & Desktop */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={triggerFileSelect}
+                disabled={isProcessingImage}
+                className={`w-full py-3 px-4 rounded-xl font-sans text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-98 ${
+                  uploadedImageUrl
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    : theme === 'dark'
+                    ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold'
+                    : theme === 'funky'
+                    ? 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]'
+                    : 'bg-stone-900 hover:bg-black text-white'
+                }`}
+              >
+                <Upload className="w-4 h-4 stroke-[2.5]" />
+                <span>
+                  {isProcessingImage
+                    ? 'Processing Image...'
+                    : uploadedImageUrl
+                    ? '✓ Photo Selected (Tap to Change)'
+                    : '📷 Upload Photo from Phone'}
+                </span>
+              </button>
+              {uploadedImageUrl && (
+                <p className="text-center font-sans text-[10px] font-semibold text-emerald-600 flex items-center justify-center gap-1">
+                  <Check className="w-3.5 h-3.5" /> High-res artwork loaded & ready
+                </p>
+              )}
+            </div>
+
             {/* Preset Selection Grid */}
-            <div className="space-y-2">
-              <label className={`block text-xs font-semibold uppercase tracking-wider font-sans ${
-                theme === 'funky' ? 'text-purple-300' : 'text-stone-500'
-              }`}>
-                OR Select Studio Preset:
+            <div className="space-y-2 pt-2 border-t border-stone-200/50 dark:border-stone-800">
+              <label className="block text-[11px] font-semibold uppercase tracking-wider font-sans text-stone-500">
+                Or Select Sample Preset:
               </label>
               <div className="grid grid-cols-5 gap-1.5">
                 {STYLE_PRESETS.map((preset, idx) => (
@@ -291,147 +341,160 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
                     onClick={() => handlePresetSelect(idx)}
                     title={`${preset.name} (${preset.genre})`}
                     className={`relative aspect-square overflow-hidden rounded-md border-2 transition-all cursor-pointer ${
-                      selectedPresetIndex === idx 
+                      selectedPresetIndex === idx && !uploadedImageUrl
                         ? theme === 'funky' 
                           ? 'border-fuchsia-500 shadow-md scale-102'
-                          : 'border-amber-700 shadow-md scale-102' 
-                        : 'border-stone-200 opacity-70 hover:opacity-100'
+                          : 'border-amber-600 shadow-md scale-102' 
+                        : 'border-stone-200 dark:border-stone-800 opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={preset.url} alt={preset.name} className="w-full h-full object-cover" />
-                    {selectedPresetIndex === idx && (
-                      <div className={`absolute inset-0 flex items-center justify-center ${
-                        theme === 'funky' ? 'bg-fuchsia-950/40' : 'bg-amber-900/35'
-                      }`}>
-                        <Check className="w-4 h-4 text-white stroke-3" />
+                    {selectedPresetIndex === idx && !uploadedImageUrl && (
+                      <div className="absolute inset-0 bg-amber-900/40 flex items-center justify-center">
+                        <Check className="w-3.5 h-3.5 text-white stroke-3" />
                       </div>
                     )}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Custom URL Input Option */}
+            <div className="space-y-1 pt-1">
+              <label className="block text-[10px] font-sans font-semibold uppercase tracking-wider text-stone-400">
+                Or paste web image link:
+              </label>
+              <input
+                type="url"
+                placeholder="https://images.unsplash.com/..."
+                value={customUrl}
+                onFocus={() => {
+                  setSelectedPresetIndex(null);
+                  setUploadedImageUrl(null);
+                }}
+                onChange={(e) => {
+                  setCustomUrl(e.target.value);
+                  setSelectedPresetIndex(null);
+                  setUploadedImageUrl(null);
+                }}
+                className={`w-full text-xs font-sans border focus:outline-hidden p-2 rounded-md transition-colors ${
+                  theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100' :
+                  theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100' :
+                  'bg-white border-stone-200'
+                }`}
+              />
+            </div>
           </div>
 
-          <div className={`mt-6 pt-4 border-t ${theme === 'dark' ? 'border-stone-850' : theme === 'funky' ? 'border-purple-900/30' : 'border-stone-200'}`}>
-            <p className={`font-sans text-[10px] italic ${theme === 'funky' ? 'text-purple-400' : 'text-stone-400'}`}>
-              Posting a work adds it instantly to the main portfolio collection and commits it to local storage.
+          <div className="mt-4 pt-3 border-t border-stone-200/50 dark:border-stone-800 hidden md:block">
+            <p className="font-sans text-[10px] italic text-stone-400">
+              Posting adds the artwork directly to your studio archive.
             </p>
           </div>
         </div>
 
-        {/* Right Column: Data Entry Form (7 cols) */}
-        <form onSubmit={handleFormSubmit} className={`md:col-span-7 p-6 md:p-8 flex flex-col justify-between overflow-y-auto max-h-[90vh] transition-colors duration-300 ${
-          theme === 'dark' ? 'bg-[#131211] text-stone-250' :
-          theme === 'funky' ? 'bg-[#12072b] text-purple-200' :
-          'bg-white text-stone-900'
-        }`}>
-          <div className="space-y-5">
+        {/* Right Column: Data Entry Form (7 cols on desktop) */}
+        <form
+          onSubmit={handleFormSubmit}
+          className={`md:col-span-7 p-5 sm:p-6 md:p-8 flex flex-col justify-between md:overflow-y-auto md:max-h-[88vh] transition-colors duration-300 ${
+            theme === 'dark' ? 'bg-[#131211] text-stone-250' :
+            theme === 'funky' ? 'bg-[#12072b] text-purple-200' :
+            'bg-white text-stone-900'
+          }`}
+        >
+          <div className="space-y-4">
             <div>
-              <h2 className={`font-serif text-2xl font-bold leading-tight ${
-                theme === 'dark' ? 'text-stone-100' :
-                theme === 'funky' ? 'text-cyan-400 text-glow-cyan' :
-                'text-stone-900'
-              }`}>Post New Painting</h2>
-              <p className={`font-sans text-xs mt-1 ${
-                theme === 'funky' ? 'text-purple-305' : 'text-stone-500'
-              }`}>
-                Elegantly archive your latest creation to make it immediately discoverable by collectors visiting the studio website.
+              <h2 className="font-serif text-xl sm:text-2xl font-bold leading-tight">
+                Artwork Information
+              </h2>
+              <p className="font-sans text-xs text-stone-500 mt-1">
+                Fill in the details below to complete your painting's catalog entry.
               </p>
             </div>
 
             {/* Core Artwork Metadata */}
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               <div className="space-y-1">
-                <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                  theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                }`}>
-                  Artwork Title <span className={theme === 'funky' ? 'text-fuchsia-400' : 'text-amber-705'}>*</span>
+                <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                  Artwork Title <span className="text-amber-600">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Dawn Breaks Over Cape Kiwanda"
+                  placeholder="e.g. Whispers of Crimson"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                    'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                    'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                   }`}
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
+                  <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
                     Medium / Materials
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Oil on Canvas"
+                    placeholder="e.g. Ink & Acrylic on Canvas"
                     value={medium}
                     onChange={(e) => setMedium(e.target.value)}
-                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                      'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                     }`}
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Physical Dimensions
+                  <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                    Dimensions
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. 18 x 24 inches"
+                    placeholder="e.g. 24 x 36 inches"
                     value={dimensions}
                     onChange={(e) => setDimensions(e.target.value)}
-                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                      'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                     }`}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Category List
+                  <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                    Category
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                      'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                     }`}
                   >
-                    <option value="Landscape">Landscape</option>
                     <option value="Abstract">Abstract</option>
+                    <option value="Landscape">Landscape</option>
                     <option value="Portrait">Portrait</option>
                     <option value="Still Life">Still Life</option>
                     <option value="Seascape">Seascape</option>
-                    <option value="Other">Other Category</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Creative Year
+                  <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                    Year
                   </label>
                   <input
                     type="number"
@@ -440,31 +503,29 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
                     required
                     value={year}
                     onChange={(e) => setYear(Number(e.target.value))}
-                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                    className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                      'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                     }`}
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Pricing (USD)
+                  <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                    Price (USD)
                   </label>
                   <div className="relative">
-                    <span className="absolute left-2.5 top-2 text-stone-400 font-sans text-xs">$</span>
+                    <span className="absolute left-2.5 top-2.5 text-stone-400 font-sans text-xs">$</span>
                     <input
                       type="number"
-                      placeholder="e.g. 1500"
+                      placeholder="e.g. 1800"
                       value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      className={`w-full text-sm font-sans pl-6 border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                        theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                        theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                        'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                      className={`w-full text-sm font-sans pl-6 border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                        theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                        theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                        'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                       }`}
                     />
                   </div>
@@ -473,18 +534,16 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
 
               {/* Body of Work / Collection */}
               <div className="space-y-1">
-                <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                  theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                }`}>
+                <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
                   Body of Work (Collection)
                 </label>
                 <select
                   value={collection}
                   onChange={(e) => setCollection(e.target.value as any)}
-                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                    'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                    'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                   }`}
                 >
                   <option value="Fossils of a Drifting Mind">Fossils of a Drifting Mind</option>
@@ -493,144 +552,64 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
                 </select>
               </div>
 
-              {/* Status and Custom URL */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Initial Status
-                  </label>
-                  <select
-                     value={status}
-                     onChange={(e) => setStatus(e.target.value as any)}
-                     className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                       theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                       theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                       'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
-                     }`}
-                  >
-                     <option value="Available">Available for Purchase</option>
-                     <option value="Sold">Sold</option>
-                     <option value="In Collection">In Collection</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                    theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                  }`}>
-                    Or Paste Image URL
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="https://images.unsplash.com/..."
-                    value={customUrl}
-                    onFocus={handleCustomUrlFocus}
-                    onChange={(e) => setCustomUrl(e.target.value)}
-                    className={`w-full text-[11px] font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors ${
-                      theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-950 focus:border-amber-500' :
-                      theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                      'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
-                    }`}
-                  />
-                </div>
-              </div>
-
-              {/* Image Upload Drag-and-drop integrated */}
+              {/* Status */}
               <div className="space-y-1">
-                <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                  theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                }`}>
-                  Or Upload Canvas File (Drag & Drop)
+                <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                  Availability Status
                 </label>
-                <div
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  onClick={triggerFileSelect}
-                  className={`border-2 border-dashed rounded-lg p-3.5 text-center transition-all cursor-pointer ${
-                    isDragOver 
-                      ? theme === 'funky' ? 'border-fuchsia-500 bg-fuchsia-955/20' : 'border-amber-700 bg-amber-55/20' 
-                      : uploadedImageUrl 
-                        ? 'border-emerald-500 bg-emerald-50/10'
-                        : theme === 'dark' ? 'border-stone-800 bg-stone-900/50 hover:bg-stone-900' :
-                        theme === 'funky' ? 'border-purple-900/60 bg-[#150d2c] hover:bg-purple-950/20 shadow-[inset_0_2px_8px_rgba(0,0,0,0.4)]' :
-                        'border-stone-200 bg-stone-50 hover:bg-stone-100/50'
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as any)}
+                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors ${
+                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                    'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                   }`}
                 >
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    className="hidden"
-                  />
-                  <Upload className={`w-5 h-5 mx-auto mb-1 ${uploadedImageUrl ? 'text-emerald-605' : theme === 'funky' ? 'text-fuchsia-400' : 'text-stone-400'}`} />
-                  {uploadedImageUrl ? (
-                    <span className="font-sans text-xs font-medium text-emerald-700 block">
-                      ✓ Real Artwork File Selected
-                    </span>
-                  ) : (
-                    <>
-                      <span className={`font-sans text-xs font-medium block ${theme === 'funky' ? 'text-purple-200' : 'text-stone-700'}`}>
-                        Drag and drop your painting photo here
-                      </span>
-                      <span className="font-sans text-[10px] text-stone-400 block mt-0.5">
-                        or click to browse local files (jpg, png)
-                      </span>
-                    </>
-                  )}
-                </div>
+                  <option value="Available">Available for Purchase</option>
+                  <option value="Sold">Sold</option>
+                  <option value="In Collection">In Collection</option>
+                </select>
               </div>
 
               {/* Description curator statement */}
               <div className="space-y-1">
-                <label className={`block font-sans text-xs font-semibold uppercase tracking-wider ${
-                  theme === 'funky' ? 'text-purple-300' : 'text-stone-700'
-                }`}>
-                  Artist Commentary / Description
+                <label className="block font-sans text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                  Description / Statement
                 </label>
                 <textarea
-                  placeholder="Share details about the inspiration behind this canvas, the brushwork, color theories, or frame setups..."
+                  placeholder="Share details about the inspiration behind this piece, materials, textures, or conceptual thoughts..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={3}
-                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-md shadow-2xs transition-colors resize-none ${
-                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:bg-stone-955 focus:border-amber-505' :
-                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800/80 text-purple-100 focus:border-fuchsia-500 focus:ring-1 focus:ring-fuchsia-500' :
-                    'bg-stone-55 focus:bg-white border-stone-200 focus:border-amber-700'
+                  className={`w-full text-sm font-sans border focus:outline-hidden p-2.5 rounded-lg shadow-2xs transition-colors resize-none ${
+                    theme === 'dark' ? 'bg-stone-900 border-stone-800 text-stone-100 focus:border-amber-500' :
+                    theme === 'funky' ? 'bg-[#150d2c] border-purple-800 text-purple-100 focus:border-fuchsia-500' :
+                    'bg-stone-50 focus:bg-white border-stone-200 focus:border-amber-700'
                   }`}
                 />
               </div>
             </div>
           </div>
 
-          <div className={`mt-8 pt-5 border-t flex items-center justify-end gap-3 transition-colors duration-300 ${
-            theme === 'dark' ? 'border-stone-850' :
-            theme === 'funky' ? 'border-purple-900/30' :
-            'border-stone-150'
-          }`}>
+          {/* Action buttons */}
+          <div className="mt-6 pt-4 border-t border-stone-200/60 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className={`px-5 py-2 border rounded-md font-sans text-sm transition-colors cursor-pointer ${
-                theme === 'dark' ? 'border-stone-800 text-stone-300 hover:text-stone-100 hover:bg-stone-800' :
-                theme === 'funky' ? 'border-purple-800 text-purple-300 hover:text-purple-100 hover:bg-purple-900/40' :
-                'border-stone-200 text-stone-600 hover:text-stone-900 hover:bg-stone-50'
-              }`}
+              className="w-full sm:w-auto px-5 py-2.5 border rounded-xl font-sans text-xs font-semibold transition-colors cursor-pointer text-stone-600 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className={`px-6 py-2 rounded-md font-sans text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer border-0 ${
-                theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950' :
-                theme === 'funky' ? 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)] hover:shadow-[0_0_20px_rgba(236,72,153,0.5)]' :
-                'bg-stone-900 hover:bg-amber-800 text-white'
+              className={`w-full sm:w-auto px-7 py-3 sm:py-2.5 rounded-xl font-sans text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 border-0 ${
+                theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold' :
+                theme === 'funky' ? 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]' :
+                'bg-stone-900 hover:bg-black text-white'
               }`}
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>Publish Canvas</span>
             </button>
           </div>
