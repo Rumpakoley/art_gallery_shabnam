@@ -116,9 +116,13 @@ export default function App() {
     return selected;
   }, [paintings]);
 
-  // Sync state changes to localStorage
+  // Sync state changes to localStorage safely with quota protection
   useEffect(() => {
-    localStorage.setItem('artist_paintings_archive', JSON.stringify(paintings));
+    try {
+      localStorage.setItem('artist_paintings_archive', JSON.stringify(paintings));
+    } catch (err) {
+      console.warn("Storage quota exceeded or storage unavailable:", err);
+    }
   }, [paintings]);
 
   // Lock background scroll when any modal is open on mobile & desktop, and cleanly release on close
@@ -163,7 +167,17 @@ export default function App() {
   const handlePostPainting = (newPainting: Painting) => {
     setPaintings((prev) => [newPainting, ...prev]);
     setIsPostModalOpen(false);
-    setToastMessage(`"${newPainting.title}" has been successfully published to your portfolio!`);
+    setToastMessage(`"${newPainting.title}" has been successfully added to your studio preview!`);
+  };
+
+  // Import paintings from backup JSON file
+  const handleImportPaintings = (imported: Painting[]) => {
+    setPaintings((prev) => {
+      const existingIds = new Set(prev.map(p => p.id));
+      const newItems = imported.filter(p => !existingIds.has(p.id));
+      return [...newItems, ...prev];
+    });
+    setToastMessage(`Successfully imported ${imported.length} artwork(s) to studio archive!`);
   };
 
   const handleToggleAdmin = () => {
@@ -995,25 +1009,24 @@ export default function App() {
           {/* Section: Studio Videos & Reels */}
           <StudioVideoSection videos={INITIAL_VIDEOS} theme={theme} />
 
-          {/* Admin Studio Registry Ledger Controls (Visible only to authenticated admins) */}
-          {isAdmin && (
-            <motion.section
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full mt-12"
-            >
-              <StudioRegistryPanel
-                profile={artistProfile}
-                paintings={paintings}
-                onOpenPostModal={() => setIsPostModalOpen(true)}
-                isAdmin={isAdmin}
-                onToggleAdmin={handleToggleAdmin}
-                theme={theme}
-              />
-            </motion.section>
-          )}
+          {/* Studio Registry Ledger & Archive Management */}
+          <motion.section
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full mt-12"
+          >
+            <StudioRegistryPanel
+              profile={artistProfile}
+              paintings={paintings}
+              onOpenPostModal={() => setIsPostModalOpen(true)}
+              isAdmin={isAdmin}
+              onToggleAdmin={handleToggleAdmin}
+              onImportPaintings={handleImportPaintings}
+              theme={theme}
+            />
+          </motion.section>
         </main>
       </div>
 
