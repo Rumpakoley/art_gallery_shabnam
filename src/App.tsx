@@ -39,9 +39,6 @@ export default function App() {
           return true;
         });
 
-        const parsedIds = new Set(sanitized.map((p) => p.id));
-        const missingDefaults = INITIAL_PAINTINGS.filter((p) => !parsedIds.has(p.id));
-
         const updatedParsed = sanitized.map((p) => {
           const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
           if (original) {
@@ -57,7 +54,19 @@ export default function App() {
           return p;
         });
 
-        return [...updatedParsed, ...missingDefaults];
+        // Clean out any custom items that have now been permanently added to INITIAL_PAINTINGS
+        const permanentTitles = new Set(INITIAL_PAINTINGS.map((p) => p.title.toLowerCase().trim()));
+        const deduplicated = updatedParsed.filter((p) => {
+          if (p.id.startsWith('painting-custom-') && permanentTitles.has(p.title.toLowerCase().trim())) {
+            return false;
+          }
+          return true;
+        });
+
+        const currentIds = new Set(deduplicated.map((p) => p.id));
+        const missingDefaults = INITIAL_PAINTINGS.filter((p) => !currentIds.has(p.id));
+
+        return [...deduplicated, ...missingDefaults];
       } catch {
         return INITIAL_PAINTINGS;
       }
@@ -108,7 +117,7 @@ export default function App() {
   const [sortBy, setSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-asc' | 'price-desc'
 
   const featuredList = useMemo(() => {
-    const ids = ['painting-10', 'painting-9', 'painting-8', 'painting-7', 'painting-6', 'painting-5'];
+    const ids = ['painting-12', 'painting-11', 'painting-10', 'painting-9', 'painting-8', 'painting-7'];
     const selected = ids.map(id => paintings.find(p => p.id === id)).filter(Boolean) as Painting[];
     if (selected.length === 0) {
       return paintings.slice(0, 4);

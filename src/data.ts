@@ -16,6 +16,8 @@ import painting7 from './assets/images/painting_7.jpg';
 import painting8 from './assets/images/painting_8.jpg';
 import painting9 from './assets/images/painting_9.jpg';
 import painting10 from './assets/images/painting_10.jpg';
+import painting11 from './assets/images/painting_11.jpg';
+import painting12 from './assets/images/painting_12.jpg';
 
 export const INITIAL_VIDEOS: StudioVideo[] = [
   {
@@ -212,5 +214,33 @@ export const INITIAL_PAINTINGS: Painting[] = [
     status: "Available",
     collection: "Fossils of a Drifting Mind",
     createdAt: "2025-07-06T21:13:00Z"
+  },
+  {
+    id: "painting-11",
+    title: "Whispers Beneath the Surface",
+    medium: "Fine Line Pen & Acrylic on Paper",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "18 x 24 inches",
+    description: "A complex surrealist study of intuitive line networks and expressive portraiture layered over an intense crimson field, exploring thoughts that stir beneath conscious awareness.",
+    imageUrl: painting11,
+    price: 3800,
+    status: "Available",
+    collection: "Whispers of the Subconscious",
+    createdAt: "2026-10-15T10:00:00Z"
+  },
+  {
+    id: "painting-12",
+    title: "Bound by Lines",
+    medium: "Acrylic, Pen & Ink on Archival Paper",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "20 x 28 inches",
+    description: "Three mysterious figures united by gilded golden crowns and intricate microscopic linework, framed against a dark contemplative midnight blue void.",
+    imageUrl: painting12,
+    price: 4200,
+    status: "Available",
+    collection: "Fossils of a Drifting Mind",
+    createdAt: "2026-10-19T14:30:00Z"
   }
 ];
