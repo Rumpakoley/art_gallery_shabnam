@@ -18,6 +18,7 @@ import painting9 from './assets/images/painting_9.jpg';
 import painting10 from './assets/images/painting_10.jpg';
 import painting11 from './assets/images/painting_11.jpg';
 import painting12 from './assets/images/painting_12.jpg';
+import painting13 from './assets/images/painting_13.jpg';
 
 export const INITIAL_VIDEOS: StudioVideo[] = [
   {
@@ -242,5 +243,19 @@ export const INITIAL_PAINTINGS: Painting[] = [
     status: "Available",
     collection: "Fossils of a Drifting Mind",
     createdAt: "2026-10-19T14:30:00Z"
+  },
+  {
+    id: "painting-13",
+    title: "Fragments of a Woman’s Soul",
+    medium: "Ink & Acrylic on Canvas",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "24 x 36 inches",
+    description: "An original work created in the artist's studio.",
+    imageUrl: painting13,
+    price: null,
+    status: "Available",
+    collection: "Fossils of a Drifting Mind",
+    createdAt: "2026-11-15T07:43:17.995Z"
   }
 ];
