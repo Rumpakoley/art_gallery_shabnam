@@ -59,7 +59,12 @@ export default function StudioRegistryPanel({
       if (res.ok && data.success) {
         setSyncStatus('✅ All artworks committed to GitHub! Live on themorphiq.com in ~45s.');
       } else {
-        setSyncStatus(`⚠️ ${data.details || data.error || 'Check GITHUB_TOKEN in Vercel settings.'}`);
+        const msg = data.details || data.error || '';
+        if (msg.includes('Bad credentials') || msg.includes('401')) {
+          setSyncStatus('⚠️ GitHub Token Error (401 Bad credentials): Please re-copy your new token from GitHub and update GITHUB_TOKEN in Vercel Project Settings > Environment Variables, then click Redeploy.');
+        } else {
+          setSyncStatus(`⚠️ ${msg || 'Check GITHUB_TOKEN in Vercel settings.'}`);
+        }
       }
     } catch (err: any) {
       setSyncStatus(`⚠️ Could not connect to publish service: ${err.message || 'offline'}`);

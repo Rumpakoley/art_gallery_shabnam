@@ -28,33 +28,63 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized: Invalid admin credentials.' });
     }
 
-    // 2. GitHub Token check
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) {
+    // 2. GitHub Token check & sanitization
+    let cleanToken = (process.env.GITHUB_TOKEN || '')
+      .trim()
+      .replace(/^["'`]|["'`]$/g, '')
+      .trim();
+
+    if (cleanToken.toLowerCase().startsWith('bearer ')) {
+      cleanToken = cleanToken.slice(7).trim();
+    } else if (cleanToken.toLowerCase().startsWith('token ')) {
+      cleanToken = cleanToken.slice(6).trim();
+    }
+
+    if (!cleanToken) {
       return res.status(500).json({
-        error: 'GITHUB_TOKEN environment variable is not configured in Vercel settings.',
-        details: 'Please add GITHUB_TOKEN in your Vercel Project Settings > Environment Variables.'
+        error: 'GITHUB_TOKEN environment variable is not configured or empty in Vercel settings.',
+        details: 'Please add a valid GITHUB_TOKEN in your Vercel Project Settings > Environment Variables.'
       });
     }
 
     const owner = 'Rumpakoley';
     const repo = 'art_gallery_shabnam';
     const branch = 'main';
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'TheMorphiq-Studio-Publisher'
-    };
 
-    // Helper for GitHub API calls
+    // GitHub Classic PATs (ghp_...) use 'token <PAT>', Fine-grained PATs use 'Bearer <PAT>'
+    const isClassicPat = cleanToken.startsWith('ghp_');
+    const primaryAuth = isClassicPat ? `token ${cleanToken}` : `Bearer ${cleanToken}`;
+    const fallbackAuth = isClassicPat ? `Bearer ${cleanToken}` : `token ${cleanToken}`;
+
+    // Helper for GitHub API calls with automatic auth-header retry
     async function ghFetch(url, options = {}) {
-      const response = await fetch(`https://api.github.com${url}`, {
-        ...options,
-        headers: { ...headers, ...(options.headers || {}) }
-      });
+      const call = async (auth) => {
+        return fetch(`https://api.github.com${url}`, {
+          ...options,
+          headers: {
+            'Authorization': auth,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'TheMorphiq-Studio-Publisher',
+            ...(options.headers || {})
+          }
+        });
+      };
+
+      let response = await call(primaryAuth);
+      
+      // If 401, retry with alternative header format
+      if (response.status === 401) {
+        console.warn(`Primary auth format failed with 401. Retrying with fallback header for ${url}...`);
+        const fallbackResponse = await call(fallbackAuth);
+        if (fallbackResponse.ok) {
+          return fallbackResponse.json();
+        }
+      }
+
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`GitHub API Error (${response.status}) on ${url}: ${errorText}`);
+        const masked = cleanToken.length > 8 ? `${cleanToken.slice(0, 4)}...${cleanToken.slice(-4)}` : 'too-short';
+        throw new Error(`GitHub API Error (${response.status}) on ${url}: ${errorText} [Token prefix: "${cleanToken.slice(0, 4)}", length: ${cleanToken.length}, masked: "${masked}"]`);
       }
       return response.json();
     }
