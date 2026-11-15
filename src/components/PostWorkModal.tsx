@@ -65,6 +65,8 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
   const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishFeedback, setPublishFeedback] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const processAndSetFile = (file: File) => {
@@ -156,9 +158,9 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
     }
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title) return;
+    if (!title || isPublishing) return;
 
     // Determine final image URL
     let finalImageUrl = 'https://picsum.photos/seed/defaultart/1200/900';
@@ -187,7 +189,42 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
       createdAt: new Date().toISOString()
     };
 
-    onPost(newPainting);
+    setIsPublishing(true);
+    setPublishFeedback('Publishing directly to GitHub & Vercel...');
+
+    try {
+      const res = await fetch('/api/publish-artwork', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adminPassword: 'morphiq@2026',
+          artwork: newPainting,
+          imageBase64: uploadedImageUrl
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setPublishFeedback('✅ Committed to GitHub! Vercel is deploying live updates (~45s).');
+        setTimeout(() => {
+          onPost(newPainting);
+        }, 1500);
+      } else {
+        if (data.details?.includes('GITHUB_TOKEN')) {
+          setPublishFeedback('Artwork saved to local preview. (Set GITHUB_TOKEN in Vercel to auto-publish to GitHub).');
+        } else {
+          setPublishFeedback(data.error || 'Saved to studio preview.');
+        }
+        setTimeout(() => {
+          onPost(newPainting);
+        }, 1800);
+      }
+    } catch (err) {
+      setPublishFeedback('Saved to studio preview.');
+      setTimeout(() => {
+        onPost(newPainting);
+      }, 1200);
+    }
   };
 
   return (
@@ -592,25 +629,46 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
             </div>
           </div>
 
+          {/* Feedback banner */}
+          {publishFeedback && (
+            <div className="mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs font-sans text-center flex items-center justify-center gap-2 animate-fadeIn">
+              {isPublishing && <span className="w-3.5 h-3.5 border-2 border-amber-500 border-t-transparent rounded-full animate-spin shrink-0" />}
+              <span>{publishFeedback}</span>
+            </div>
+          )}
+
           {/* Action buttons */}
           <div className="mt-6 pt-4 border-t border-stone-200/60 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="w-full sm:w-auto px-5 py-2.5 border rounded-xl font-sans text-xs font-semibold transition-colors cursor-pointer text-stone-600 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800"
+              disabled={isPublishing}
+              className="w-full sm:w-auto px-5 py-2.5 border rounded-xl font-sans text-xs font-semibold transition-colors cursor-pointer text-stone-600 dark:text-stone-300 border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
+              disabled={isPublishing}
               className={`w-full sm:w-auto px-7 py-3 sm:py-2.5 rounded-xl font-sans text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg active:scale-98 border-0 ${
+                isPublishing ? 'opacity-75 cursor-wait' : ''
+              } ${
                 theme === 'dark' ? 'bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold' :
                 theme === 'funky' ? 'bg-fuchsia-600 hover:bg-fuchsia-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.3)]' :
                 'bg-stone-900 hover:bg-black text-white'
               }`}
             >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-              <span>Publish Canvas</span>
+              {isPublishing ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  <span>Publishing Live...</span>
+                </>
+              ) : (
+                <>
+                  <Plus className="w-4 h-4 stroke-[2.5]" />
+                  <span>Publish to Live Website</span>
+                </>
+              )}
             </button>
           </div>
         </form>

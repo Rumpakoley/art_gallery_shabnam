@@ -19,6 +19,9 @@ import painting10 from './assets/images/painting_10.jpg';
 import painting11 from './assets/images/painting_11.jpg';
 import painting12 from './assets/images/painting_12.jpg';
 import painting13 from './assets/images/painting_13.jpg';
+import customPaintingsRaw from './custom_paintings.json';
+
+const customPaintings: Painting[] = (customPaintingsRaw as unknown as Painting[]) || [];
 
 export const INITIAL_VIDEOS: StudioVideo[] = [
   {
@@ -76,6 +79,7 @@ export const INITIAL_PROFILE: ArtistProfile = {
 };
 
 export const INITIAL_PAINTINGS: Painting[] = [
+  ...customPaintings,
   {
     id: "painting-1",
     title: "Crashing Tides at Cape Meares",
