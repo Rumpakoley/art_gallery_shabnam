@@ -19,6 +19,7 @@ import painting10 from './assets/images/painting_10.jpg';
 import painting11 from './assets/images/painting_11.jpg';
 import painting12 from './assets/images/painting_12.jpg';
 import painting13 from './assets/images/painting_13.jpg';
+import painting14 from './assets/images/painting_14.jpg';
 import customPaintingsRaw from './custom_paintings.json';
 
 const customPaintings: Painting[] = (customPaintingsRaw as unknown as Painting[]) || [];
@@ -261,5 +262,19 @@ export const INITIAL_PAINTINGS: Painting[] = [
     status: "Available",
     collection: "Fossils of a Drifting Mind",
     createdAt: "2026-11-15T07:43:17.995Z"
+  },
+  {
+    id: "painting-14",
+    title: "Breathe in the Silence",
+    medium: "Ink & Acrylic on Canvas",
+    category: "Abstract",
+    year: 2026,
+    dimensions: "24 x 36 inches",
+    description: "An original work created in the artist's studio.",
+    imageUrl: painting14,
+    price: null,
+    status: "Available",
+    collection: "Fossils of a Drifting Mind",
+    createdAt: "2026-11-15T08:46:53.008Z"
   }
 ];
