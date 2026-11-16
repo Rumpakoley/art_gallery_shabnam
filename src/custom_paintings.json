@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "painting-custom-1794808195685",
+    "title": " Kundalini — The Cosmic Chakra",
+    "medium": "Ink & Acrylic on paper",
+    "category": "Abstract",
+    "year": 2026,
+    "dimensions": "8.27 × 11.69 inches",
+    "description": "An exploration of human nature as a reflection of the cosmos. Inspired by Kundalini and chakra philosophy, this artwork brings together serpents, human forms and elemental forces to explore the relationship between instinct, consciousness and universal energy. It reflects my fascination with the unseen forces that connect all existence, where the primal and the spiritual coexist, and the human being becomes a universe within itself.",
+    "imageUrl": "/artworks/painting-custom-1794808195685.jpg",
+    "price": 1800,
+    "status": "Available",
+    "collection": "Fossils of a Drifting Mind",
+    "createdAt": "2026-11-16T05:49:55.685Z"
+  }
+]
