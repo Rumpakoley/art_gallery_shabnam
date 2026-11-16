@@ -1,5 +1,33 @@
 [
   {
+    "id": "painting-custom-1794219217183",
+    "title": "Beyond",
+    "medium": "Ink & Acrylic on Paper",
+    "category": "Abstract",
+    "year": 2023,
+    "dimensions": "A4 — 8.27 × 11.69 inches (21 × 29.7 cm)",
+    "description": "Beyond\n\nBeyond the boundaries of religion, identity and inherited beliefs lies a personal understanding of existence.\nThis artwork is an expression of my inner world, where motherhood, mythology, nature and the idea of the infinite come together. At its centre is Maa Kali, surrounded by animal forms, multiple eyes and intricate organic patterns. The imagery reflects my fascination with the many expressions of the universe and the mysterious ways in which we experience the unknown.\n\nI don’t wish to confine the infinite to a name or a religion. I only know that I found an immense light in you, Kaali — a light I call Allah.\n\nBorn from a deeply personal space of contemplation, this work explores the coexistence of different cultural and spiritual influences without seeking to define or reconcile them.\n\nBeyond is an exploration of existence, motherhood, humanity and the infinite light within — something that perhaps cannot be explained, only felt.",
+    "imageUrl": "/artworks/painting-custom-1794219217183.jpg",
+    "price": 2100,
+    "status": "Available",
+    "collection": "Fossils of a Drifting Mind",
+    "createdAt": "2026-11-09T10:13:37.183Z"
+  },
+  {
+    "id": "painting-custom-1794559710884",
+    "title": "Kali and Her Many Forms",
+    "medium": "Ink & Acrylic on Paper",
+    "category": "Other",
+    "year": 2023,
+    "dimensions": "30.48 × 39.37 cm",
+    "description": "Kali and Her Many Forms\n\nAn exploration of the feminine as an expression of nature, creation and transformation.\nThis artwork brings together the image of a woman and the organic language of flowers, leaves, intricate patterns and natural forms. Her presence seems to emerge from the very elements that surround her, blurring the boundaries between the human, the natural and the divine.\n\nInspired by the symbolism of Maa Kali and the multifaceted nature of womanhood, this piece reflects on feminine energy beyond conventional representations. She is both delicate and powerful, rooted and ever-changing, an embodiment of creation in its many forms.\nPerhaps the woman and the goddess are not separate, but different expressions of the same infinite existence.",
+    "imageUrl": "/artworks/painting-custom-1794559710884.jpg",
+    "price": 1800,
+    "status": "Available",
+    "collection": "Fossils of a Drifting Mind",
+    "createdAt": "2026-11-13T08:48:30.884Z"
+  },
+  {
     "id": "painting-custom-1794808442918",
     "title": "The Unfinished Species — Between Births",
     "medium": "Ink & Acrylic on Handmade Paper",
