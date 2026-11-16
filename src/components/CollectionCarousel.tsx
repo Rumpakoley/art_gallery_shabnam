@@ -13,6 +13,7 @@ interface CollectionCarouselProps {
   description: string;
   paintings: Painting[];
   onViewDetails: (painting: Painting) => void;
+  onEditPainting?: (painting: Painting) => void;
   theme?: 'light' | 'dark' | 'funky';
   isAdmin?: boolean;
 }
@@ -22,6 +23,7 @@ export default function CollectionCarousel({
   description,
   paintings,
   onViewDetails,
+  onEditPainting,
   theme = 'light',
   isAdmin = false,
 }: CollectionCarouselProps) {
@@ -96,6 +98,7 @@ export default function CollectionCarousel({
               <PaintingCard
                 painting={painting}
                 onViewDetails={onViewDetails}
+                onEditPainting={onEditPainting}
                 theme={theme}
                 isAdmin={isAdmin}
               />

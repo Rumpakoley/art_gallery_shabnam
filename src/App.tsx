@@ -43,12 +43,9 @@ export default function App() {
           const original = INITIAL_PAINTINGS.find((orig) => orig.id === p.id);
           if (original) {
             return {
+              ...original,
               ...p,
-              imageUrl: original.imageUrl,
-              medium: original.medium,
-              status: original.status,
-              collection: original.collection,
-              title: original.title
+              imageUrl: p.imageUrl || original.imageUrl
             };
           }
           return p;
@@ -90,6 +87,7 @@ export default function App() {
   
   const [selectedPainting, setSelectedPainting] = useState<Painting | null>(null);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [editingPainting, setEditingPainting] = useState<Painting | null>(null);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   
@@ -172,11 +170,27 @@ export default function App() {
     return () => clearInterval(interval);
   }, [featuredList]);
 
-  // Add painting to portfolio
-  const handlePostPainting = (newPainting: Painting) => {
-    setPaintings((prev) => [newPainting, ...prev]);
+  // Add or update painting in portfolio
+  const handleSavePainting = (savedPainting: Painting) => {
+    setPaintings((prev) => {
+      const exists = prev.some(p => p.id === savedPainting.id);
+      if (exists) {
+        return prev.map(p => p.id === savedPainting.id ? savedPainting : p);
+      }
+      return [savedPainting, ...prev];
+    });
+    // If detail modal is open with this painting, update it too
+    if (selectedPainting && selectedPainting.id === savedPainting.id) {
+      setSelectedPainting(savedPainting);
+    }
     setIsPostModalOpen(false);
-    setToastMessage(`"${newPainting.title}" has been successfully added to your studio preview!`);
+    setEditingPainting(null);
+    setToastMessage(`"${savedPainting.title}" has been successfully saved!`);
+  };
+
+  const handleEditPainting = (painting: Painting) => {
+    setEditingPainting(painting);
+    setIsPostModalOpen(true);
   };
 
   // Import paintings from backup JSON file
@@ -859,6 +873,7 @@ export default function App() {
                     description={col.description}
                     paintings={collectionPaintings}
                     onViewDetails={setSelectedPainting}
+                    onEditPainting={handleEditPainting}
                     theme={theme}
                     isAdmin={isAdmin}
                   />
@@ -878,6 +893,7 @@ export default function App() {
                     description="Various independent visual abstractions and sketch studies."
                     paintings={unassignedPaintings}
                     onViewDetails={setSelectedPainting}
+                    onEditPainting={handleEditPainting}
                     theme={theme}
                     isAdmin={isAdmin}
                   />
@@ -1032,10 +1048,14 @@ export default function App() {
             <StudioRegistryPanel
               profile={artistProfile}
               paintings={paintings}
-              onOpenPostModal={() => setIsPostModalOpen(true)}
+              onOpenPostModal={() => {
+                setEditingPainting(null);
+                setIsPostModalOpen(true);
+              }}
               isAdmin={isAdmin}
               onToggleAdmin={handleToggleAdmin}
               onImportPaintings={handleImportPaintings}
+              onEditPainting={handleEditPainting}
               theme={theme}
             />
           </motion.section>
@@ -1061,16 +1081,21 @@ export default function App() {
         <PaintingDetailModal
           painting={selectedPainting}
           onClose={() => setSelectedPainting(null)}
+          onEditPainting={handleEditPainting}
           theme={theme}
           isAdmin={isAdmin}
         />
       )}
 
-      {/* Creator Painting Poster Modal */}
+      {/* Creator Painting Poster / Editor Modal */}
       {isPostModalOpen && (
         <PostWorkModal
-          onClose={() => setIsPostModalOpen(false)}
-          onPost={handlePostPainting}
+          onClose={() => {
+            setIsPostModalOpen(false);
+            setEditingPainting(null);
+          }}
+          onPost={handleSavePainting}
+          initialPainting={editingPainting}
           theme={theme}
         />
       )}

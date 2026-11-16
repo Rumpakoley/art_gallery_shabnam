@@ -228,9 +228,13 @@ export default async function handler(req, res) {
         createdAt: artwork.createdAt || new Date().toISOString()
       };
 
-      const existingIdx = existingPaintings.findIndex(p => p.id === artworkId);
+      const existingIdx = existingPaintings.findIndex(p => p.id === artworkId || p.title?.toLowerCase().trim() === artwork.title?.toLowerCase().trim());
       if (existingIdx >= 0) {
-        existingPaintings[existingIdx] = newPainting;
+        existingPaintings[existingIdx] = {
+          ...existingPaintings[existingIdx],
+          ...newPainting,
+          imageUrl: finalImageUrl || existingPaintings[existingIdx].imageUrl
+        };
       } else {
         existingPaintings.unshift(newPainting);
       }
@@ -265,10 +269,13 @@ export default async function handler(req, res) {
     });
 
     // 6. Create commit
+    const isUpdateAction = action === 'update' || (artwork && existingPaintings.some(p => p.id === artwork.id));
     const commitMessage = action === 'delete'
       ? `Delete artwork: ${artwork?.title || artwork?.id} [Studio Admin]`
       : action === 'batch_sync'
       ? `Sync batch of ${artworks?.length || 0} artworks [Studio Admin]`
+      : isUpdateAction
+      ? `Update artwork: "${artwork.title}" [Studio Admin]`
       : `Publish artwork: "${artwork.title}" [Studio Admin]`;
 
     const newCommit = await ghFetch(`/repos/${owner}/${repo}/git/commits`, {

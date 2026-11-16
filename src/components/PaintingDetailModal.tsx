@@ -6,16 +6,23 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Painting } from '../types';
-import { X, Calendar, SlidersHorizontal, ArrowRight, CheckCircle2, Mail, Info, Layers, Home, Palette } from 'lucide-react';
+import { X, Calendar, SlidersHorizontal, ArrowRight, CheckCircle2, Mail, Info, Layers, Home, Palette, Pencil } from 'lucide-react';
 
 interface PaintingDetailModalProps {
   painting: Painting | null;
   onClose: () => void;
+  onEditPainting?: (painting: Painting) => void;
   theme?: 'light' | 'dark' | 'funky';
   isAdmin?: boolean;
 }
 
-export default function PaintingDetailModal({ painting, onClose, theme = 'dark', isAdmin = false }: PaintingDetailModalProps) {
+export default function PaintingDetailModal({ 
+  painting, 
+  onClose, 
+  onEditPainting,
+  theme = 'dark', 
+  isAdmin = false 
+}: PaintingDetailModalProps) {
   const [inquiryName, setInquiryName] = useState('');
   const [inquiryEmail, setInquiryEmail] = useState('');
   const [inquiryMsg, setInquiryMsg] = useState('');
@@ -350,18 +357,34 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
           }`}>
             <div>
               {/* Category Breadcrumb */}
-              <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className={`text-[9px] uppercase font-sans font-bold tracking-widest px-2 py-1 rounded-sm border ${
-                  theme === 'dark' ? 'bg-stone-900 text-amber-450 border-stone-850' :
-                  theme === 'funky' ? 'bg-purple-950/60 text-fuchsia-400 border-purple-800/40 text-glow-neon' :
-                  'bg-stone-105 text-amber-800 border-stone-200/50'
-                }`}>
-                  {painting.category}
-                </span>
-                <span className="text-stone-500 font-sans">•</span>
-                <span className={`text-[10px] font-sans font-semibold uppercase tracking-wider ${theme === 'funky' ? 'text-purple-400' : 'text-stone-400'}`}>
-                  Catalog ID: {painting.id}
-                </span>
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <span className={`text-[9px] uppercase font-sans font-bold tracking-widest px-2 py-1 rounded-sm border ${
+                    theme === 'dark' ? 'bg-stone-900 text-amber-450 border-stone-850' :
+                    theme === 'funky' ? 'bg-purple-950/60 text-fuchsia-400 border-purple-800/40 text-glow-neon' :
+                    'bg-stone-105 text-amber-800 border-stone-200/50'
+                  }`}>
+                    {painting.category}
+                  </span>
+                  <span className="text-stone-500 font-sans">•</span>
+                  <span className={`text-[10px] font-sans font-semibold uppercase tracking-wider ${theme === 'funky' ? 'text-purple-400' : 'text-stone-400'}`}>
+                    Catalog ID: {painting.id}
+                  </span>
+                </div>
+
+                {isAdmin && onEditPainting && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onEditPainting(painting);
+                    }}
+                    className="px-3 py-1 rounded-md bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-sans font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer transition-all shadow-sm active:scale-95"
+                  >
+                    <Pencil className="w-3.5 h-3.5 stroke-[2.5]" />
+                    <span>Edit Artwork</span>
+                  </button>
+                )}
               </div>
 
               {/* Title & Metadata */}
@@ -399,14 +422,29 @@ export default function PaintingDetailModal({ painting, onClose, theme = 'dark',
 
               {/* Painting description */}
               <div className="mt-5 space-y-3">
-                <h4 className={`text-[10px] uppercase font-sans font-bold tracking-wider flex items-center gap-1.5 ${
-                  theme === 'dark' ? 'text-stone-500' :
-                  theme === 'funky' ? 'text-fuchsia-400' :
-                  'text-stone-400'
-                }`}>
-                  <Info className="w-3.5 h-3.5 text-stone-400" />
-                  Curatorial Commentary
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className={`text-[10px] uppercase font-sans font-bold tracking-wider flex items-center gap-1.5 ${
+                    theme === 'dark' ? 'text-stone-500' :
+                    theme === 'funky' ? 'text-fuchsia-400' :
+                    'text-stone-400'
+                  }`}>
+                    <Info className="w-3.5 h-3.5 text-stone-400" />
+                    Curatorial Commentary
+                  </h4>
+                  {isAdmin && onEditPainting && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        onEditPainting(painting);
+                      }}
+                      className="text-[10px] text-amber-700 dark:text-amber-400 hover:underline font-sans font-bold uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                    >
+                      <Pencil className="w-3 h-3" />
+                      <span>Edit Description</span>
+                    </button>
+                  )}
+                </div>
                 <p className={`font-sans text-xs md:text-sm leading-relaxed whitespace-pre-line ${
                   theme === 'dark' ? 'text-stone-300' :
                   theme === 'funky' ? 'text-purple-200/90' :

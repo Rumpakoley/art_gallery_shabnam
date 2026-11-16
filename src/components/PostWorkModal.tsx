@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Painting } from '../types';
-import { X, Upload, Check, Image as ImageIcon, Plus, Camera } from 'lucide-react';
+import { X, Upload, Check, Image as ImageIcon, Plus, Camera, Pencil } from 'lucide-react';
 
 interface PostWorkModalProps {
   onClose: () => void;
   onPost: (painting: Painting) => void;
+  initialPainting?: Painting | null;
   theme?: 'light' | 'dark' | 'funky';
 }
 
@@ -48,26 +49,61 @@ const STYLE_PRESETS = [
   }
 ];
 
-export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostWorkModalProps) {
-  const [title, setTitle] = useState('');
-  const [medium, setMedium] = useState('Ink & Acrylic on Canvas');
-  const [category, setCategory] = useState('Abstract');
-  const [year, setYear] = useState(2026);
-  const [dimensions, setDimensions] = useState('24 x 36 inches');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('1800');
-  const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>('Available');
-  const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>('Fossils of a Drifting Mind');
+export default function PostWorkModal({ onClose, onPost, initialPainting, theme = 'dark' }: PostWorkModalProps) {
+  const isEditing = Boolean(initialPainting);
+
+  const [title, setTitle] = useState(initialPainting?.title || '');
+  const [medium, setMedium] = useState(initialPainting?.medium || 'Ink & Acrylic on Canvas');
+  const [category, setCategory] = useState(initialPainting?.category || 'Abstract');
+  const [year, setYear] = useState(initialPainting?.year || 2026);
+  const [dimensions, setDimensions] = useState(initialPainting?.dimensions || '24 x 36 inches');
+  const [description, setDescription] = useState(initialPainting?.description || '');
+  const [price, setPrice] = useState(initialPainting?.price !== null && initialPainting?.price !== undefined ? String(initialPainting.price) : '');
+  const [status, setStatus] = useState<'Available' | 'Sold' | 'In Collection'>(initialPainting?.status || 'Available');
+  const [collection, setCollection] = useState<'Fossils of a Drifting Mind' | 'The Ones I Carry' | 'Whispers of the Subconscious'>(
+    initialPainting?.collection || 'Fossils of a Drifting Mind'
+  );
   
   // Image handling
-  const [customUrl, setCustomUrl] = useState('');
+  const [customUrl, setCustomUrl] = useState(initialPainting?.imageUrl || '');
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
-  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(0);
+  const [selectedPresetIndex, setSelectedPresetIndex] = useState<number | null>(initialPainting ? null : 0);
   const [isDragOver, setIsDragOver] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [publishFeedback, setPublishFeedback] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (initialPainting) {
+      setTitle(initialPainting.title);
+      setMedium(initialPainting.medium);
+      setCategory(initialPainting.category);
+      setYear(initialPainting.year);
+      setDimensions(initialPainting.dimensions);
+      setDescription(initialPainting.description || '');
+      setPrice(initialPainting.price !== null && initialPainting.price !== undefined ? String(initialPainting.price) : '');
+      setStatus(initialPainting.status);
+      setCollection(initialPainting.collection || 'Fossils of a Drifting Mind');
+      setCustomUrl(initialPainting.imageUrl);
+      setUploadedImageUrl(null);
+      setSelectedPresetIndex(null);
+    } else {
+      setTitle('');
+      setMedium('Ink & Acrylic on Canvas');
+      setCategory('Abstract');
+      setYear(2026);
+      setDimensions('24 x 36 inches');
+      setDescription('');
+      setPrice('1800');
+      setStatus('Available');
+      setCollection('Fossils of a Drifting Mind');
+      setCustomUrl('');
+      setUploadedImageUrl(null);
+      setSelectedPresetIndex(0);
+    }
+    setPublishFeedback(null);
+  }, [initialPainting]);
 
   const processAndSetFile = (file: File) => {
     setIsProcessingImage(true);
@@ -163,19 +199,19 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
     if (!title || isPublishing) return;
 
     // Determine final image URL
-    let finalImageUrl = 'https://picsum.photos/seed/defaultart/1200/900';
+    let finalImageUrl = initialPainting?.imageUrl || 'https://picsum.photos/seed/defaultart/1200/900';
     if (uploadedImageUrl) {
       finalImageUrl = uploadedImageUrl;
     } else if (customUrl) {
       finalImageUrl = customUrl;
-    } else if (selectedPresetIndex !== null) {
+    } else if (selectedPresetIndex !== null && !isEditing) {
       finalImageUrl = STYLE_PRESETS[selectedPresetIndex].url;
     }
 
     const priceNum = price ? parseFloat(price) : null;
 
-    const newPainting: Painting = {
-      id: `painting-custom-${Date.now()}`,
+    const savedPainting: Painting = {
+      id: initialPainting?.id || `painting-custom-${Date.now()}`,
       title,
       medium,
       category,
@@ -186,11 +222,11 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
       price: priceNum,
       status,
       collection,
-      createdAt: new Date().toISOString()
+      createdAt: initialPainting?.createdAt || new Date().toISOString()
     };
 
     setIsPublishing(true);
-    setPublishFeedback('Publishing directly to GitHub & Vercel...');
+    setPublishFeedback(isEditing ? 'Saving updates directly to GitHub & Vercel...' : 'Publishing directly to GitHub & Vercel...');
 
     try {
       const res = await fetch('/api/publish-artwork', {
@@ -198,16 +234,17 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           adminPassword: 'morphiq@2026',
-          artwork: newPainting,
+          action: isEditing ? 'update' : 'publish',
+          artwork: savedPainting,
           imageBase64: uploadedImageUrl
         })
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setPublishFeedback('✅ Committed to GitHub! Vercel is deploying live updates (~45s).');
+        setPublishFeedback(isEditing ? '✅ Changes committed to GitHub! Live on themorphiq.com in ~45s.' : '✅ Committed to GitHub! Vercel is deploying live updates (~45s).');
         setTimeout(() => {
-          onPost(newPainting);
+          onPost(savedPainting);
         }, 1500);
       } else {
         if (data.details?.includes('GITHUB_TOKEN')) {
@@ -216,13 +253,13 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
           setPublishFeedback(data.error || 'Saved to studio preview.');
         }
         setTimeout(() => {
-          onPost(newPainting);
+          onPost(savedPainting);
         }, 1800);
       }
     } catch (err) {
       setPublishFeedback('Saved to studio preview.');
       setTimeout(() => {
-        onPost(newPainting);
+        onPost(savedPainting);
       }, 1200);
     }
   };
@@ -442,10 +479,12 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
           <div className="space-y-4">
             <div>
               <h2 className="font-serif text-xl sm:text-2xl font-bold leading-tight">
-                Artwork Information
+                {isEditing ? `Edit Artwork: "${initialPainting.title}"` : 'Artwork Information'}
               </h2>
               <p className="font-sans text-xs text-stone-500 mt-1">
-                Fill in the details below to complete your painting's catalog entry.
+                {isEditing
+                  ? 'Update curatorial commentary, description, dimensions, price, status, or photo.'
+                  : "Fill in the details below to complete your painting's catalog entry."}
               </p>
             </div>
 
@@ -661,7 +700,12 @@ export default function PostWorkModal({ onClose, onPost, theme = 'dark' }: PostW
               {isPublishing ? (
                 <>
                   <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  <span>Publishing Live...</span>
+                  <span>{isEditing ? 'Saving Updates...' : 'Publishing Live...'}</span>
+                </>
+              ) : isEditing ? (
+                <>
+                  <Pencil className="w-4 h-4 stroke-[2.5]" />
+                  <span>Save Changes & Update Live</span>
                 </>
               ) : (
                 <>

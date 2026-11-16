@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import React, { useState, useRef } from 'react';
-import { FileText, Sparkles, Copy, Check, Download, Upload, CloudCheck, Info } from 'lucide-react';
+import { FileText, Sparkles, Copy, Check, Download, Upload, CloudCheck, Info, Pencil } from 'lucide-react';
 import { ArtistProfile, Painting } from '../types';
 import { INITIAL_PAINTINGS } from '../data';
 
@@ -14,6 +14,7 @@ interface StudioRegistryPanelProps {
   isAdmin: boolean;
   onToggleAdmin: () => void;
   onImportPaintings?: (imported: Painting[]) => void;
+  onEditPainting?: (painting: Painting) => void;
   theme?: 'light' | 'dark' | 'funky';
 }
 
@@ -23,6 +24,7 @@ export default function StudioRegistryPanel({
   isAdmin,
   onToggleAdmin,
   onImportPaintings,
+  onEditPainting,
   theme = 'light'
 }: StudioRegistryPanelProps): React.JSX.Element {
   const [copiedCode, setCopiedCode] = useState(false);
@@ -195,8 +197,18 @@ export default function StudioRegistryPanel({
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1 font-sans text-[10px]">
                   {customPaintings.map((p) => (
-                    <span key={p.id} className="px-2 py-0.5 rounded-md bg-amber-200/60 dark:bg-amber-900/50 font-medium">
-                      • {p.title}
+                    <span key={p.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-200/60 dark:bg-amber-900/50 font-medium">
+                      <span>• {p.title}</span>
+                      {onEditPainting && (
+                        <button
+                          type="button"
+                          onClick={() => onEditPainting(p)}
+                          className="hover:text-amber-800 dark:hover:text-amber-200 cursor-pointer p-0.5 rounded transition-colors"
+                          title={`Edit ${p.title}`}
+                        >
+                          <Pencil className="w-3 h-3 text-amber-700 dark:text-amber-300" />
+                        </button>
+                      )}
                     </span>
                   ))}
                 </div>

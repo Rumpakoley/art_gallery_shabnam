@@ -6,12 +6,13 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Painting } from '../types';
-import { Maximize2, Tag } from 'lucide-react';
+import { Maximize2, Tag, Pencil } from 'lucide-react';
 
 interface PaintingCardProps {
   key?: string | number;
   painting: Painting;
   onViewDetails: (painting: Painting) => void;
+  onEditPainting?: (painting: Painting) => void;
   theme?: 'light' | 'dark' | 'funky';
   isAdmin?: boolean;
 }
@@ -19,6 +20,7 @@ interface PaintingCardProps {
 export default function PaintingCard({ 
   painting, 
   onViewDetails, 
+  onEditPainting,
   theme = 'dark',
   isAdmin = false
 }: PaintingCardProps): React.JSX.Element {
@@ -128,6 +130,22 @@ export default function PaintingCard({
         >
           {painting.status}
         </span>
+
+        {/* Admin Edit Button */}
+        {isAdmin && onEditPainting && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditPainting(painting);
+            }}
+            className="absolute top-2.5 right-2.5 z-20 px-2.5 py-1 rounded-md bg-stone-900/90 hover:bg-black text-amber-300 hover:text-amber-200 border border-amber-500/40 text-[9px] font-sans font-bold uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 cursor-pointer backdrop-blur-xs"
+            title="Edit artwork details and description"
+          >
+            <Pencil className="w-3 h-3 text-amber-400" />
+            <span>Edit</span>
+          </button>
+        )}
 
         {/* Year Badge */}
         <span className={`absolute bottom-2.5 right-2.5 px-1.5 py-0.5 text-[8px] font-sans font-bold tracking-widest backdrop-blur-xs rounded-xs ${
