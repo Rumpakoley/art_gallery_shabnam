@@ -1,5 +1,19 @@
 [
   {
+    "id": "painting-custom-1794904704661",
+    "title": "LACUNA",
+    "medium": "Ink & Acrylic on handmade paper",
+    "category": "Other",
+    "year": 2026,
+    "dimensions": "A4 (8.27 × 11.69 inches)",
+    "description": "LACUNA explores the paradox of freedom, desire and self-dissolution. Inspired by the image of a moth drawn towards the very fire that threatens its wings, the work inhabits the fragile territory between liberation and destruction.\n\nAn intricate, almost mythical anatomy emerges, where the boundaries between human, animal and the unknown become indistinguishable. A body that holds multiple possibilities of existence, caught somewhere between creation and disappearance.\n\nThe work questions whether freedom is always an act of becoming, or sometimes an invitation to unmake oneself.\n\nPerhaps what we seek to escape is also what gives us form.",
+    "imageUrl": "/artworks/painting-custom-1794904704661.jpg",
+    "price": 3000,
+    "status": "Available",
+    "collection": "Fossils of a Drifting Mind",
+    "createdAt": "2026-11-17T08:38:24.661Z"
+  },
+  {
     "id": "painting-custom-1794219217183",
     "title": "Beyond",
     "medium": "Ink & Acrylic on Paper",
